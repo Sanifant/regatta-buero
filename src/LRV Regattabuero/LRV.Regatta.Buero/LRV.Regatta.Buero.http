@@ -1,0 +1,6 @@
+@LRV.Regatta.Buero_HostAddress = http://localhost:5015
+
+GET {{LRV.Regatta.Buero_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

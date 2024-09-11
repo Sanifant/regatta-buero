@@ -1,0 +1,6 @@
+services:
+  lrv.regatta.buero:
+    image: ${DOCKER_REGISTRY-}lrvregattabuero
+    build:
+      context: .
+      dockerfile: LRV.Regatta.Buero/Dockerfile
