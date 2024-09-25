@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LRV.Regatta.Buero.Atributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LRV.Regatta.Buero.Controllers
 {
+    [ApiKey]
     [Route("api/[controller]")]
     [ApiController]
     public class FinishController : ControllerBase
