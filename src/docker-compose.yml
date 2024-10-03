@@ -1,7 +1,6 @@
 services:
   backend:
-    build:
-      context: LRV.Regatta.Buero
+    build: LRV.Regatta.Buero
     restart: always
     secrets:
       - db-password

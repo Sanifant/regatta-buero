@@ -10,14 +10,14 @@
     <DockerServiceName>lrv.regatta.buero</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="db\password.txt" />
+    <None Remove="db\**" />
+    <None Remove="proxy\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="proxy\" />
   </ItemGroup>
 </Project>
