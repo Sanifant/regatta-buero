@@ -13,4 +13,19 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Models\FinishObject.cs">
+      <Generator>DtsGenerator</Generator>
+      <LastGenOutput>FinishObject.cs.d.ts</LastGenOutput>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Models\FinishObject.cs.d.ts">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FinishObject.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

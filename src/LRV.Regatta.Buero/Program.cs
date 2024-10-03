@@ -1,4 +1,6 @@
 
+using LRV.Regatta.Buero.Services;
+
 namespace LRV.Regatta.Buero
 {
     public class Program
@@ -15,12 +17,12 @@ namespace LRV.Regatta.Buero
                                       policy.AllowAnyOrigin();
                                       policy.AllowAnyHeader();
                                       policy.AllowAnyMethod();
-                                      policy.AllowCredentials();
                                   });
             });
 
 
             // Add services to the container.
+            builder.Services.AddSingleton<IStorageService, FileStorageService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,6 +37,8 @@ namespace LRV.Regatta.Buero
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("origin");
 
             app.UseAuthorization();
 
