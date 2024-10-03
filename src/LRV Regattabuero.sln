@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Buero.Frontend", "Buero.Frontend\Buero.Frontend.esproj", "{A687531F-DB42-4E43-ACB7-F6306D75B5DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,12 @@ Global
 		{4FB71CFD-C1C6-4760-97F8-6CB8A8F6230E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB71CFD-C1C6-4760-97F8-6CB8A8F6230E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB71CFD-C1C6-4760-97F8-6CB8A8F6230E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A687531F-DB42-4E43-ACB7-F6306D75B5DB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

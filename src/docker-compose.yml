@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ..\LRV.Regatta.Buero
+      context: LRV.Regatta.Buero
     restart: always
     secrets:
       - db-password
@@ -26,7 +26,7 @@ services:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
 
   proxy:
-    build: ..\Buero.Frontend
+    build: Buero.Frontend
     ports:
       - 80:80
     depends_on: 

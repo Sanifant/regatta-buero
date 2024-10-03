@@ -9,6 +9,15 @@ namespace LRV.Regatta.Buero.Services
         public FileStorageService()
         {
             _finishObjects = new List<FinishObject>();
+
+#if DEBUG
+            _finishObjects.Add(new FinishObject()
+            {
+                Name = "file",
+                Path = "path"
+            });
+
+#endif
         }
 
         public void Add(FinishObject @object)
