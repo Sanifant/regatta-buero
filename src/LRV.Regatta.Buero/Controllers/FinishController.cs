@@ -34,11 +34,11 @@ namespace LRV.Regatta.Buero.Controllers
                     FinishObject item = new FinishObject();
 
                     item.Name = file.FileName;
-                    item.Path =  Path.Combine(this._configuration.GetValue<string>("ImageFolder"), file.FileName);
+                    item.Path =  file.FileName;
 
                 this._storageService.Add(item);
 
-                    using (var stream = System.IO.File.Create(item.Path))
+                    using (var stream = System.IO.File.Create(Path.Combine(this._configuration.GetValue<string>("ImageFolder"), file.FileName)))
                     {
                         await file.CopyToAsync(stream);
                     }
