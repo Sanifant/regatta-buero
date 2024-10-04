@@ -24,6 +24,7 @@ RUN dotnet publish "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj" -c $BUILD_CONF
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
+LABEL Description=Regatta Buero
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LRV.Regatta.Buero.dll"]
