@@ -19,8 +19,11 @@ export class AppComponent implements OnInit  {
 
   ngOnInit() {
     console.log("starting OnInit");
-    this.apiService.getData().subscribe(response => {
-      this.data = response;
-    });
+    setInterval(() => {
+      console.log("refreshing data");
+      this.apiService.getData().subscribe(response => {
+        this.data = response;
+      });
+    }, 5000);
   }
 }

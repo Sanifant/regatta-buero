@@ -3,6 +3,7 @@
   <h1>{{title}}</h1>
 
   <div *ngFor="let item of data">
+    <img src='{{ "https://buero.luebeckregatta.de/images/" + item.path }}' alt='{{ "picture " + item.name }}' width="600" height="300">
     <p>{{ item.name }}</p>
   </div>
 
