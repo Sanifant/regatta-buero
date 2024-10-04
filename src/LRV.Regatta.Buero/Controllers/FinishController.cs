@@ -43,7 +43,7 @@ namespace LRV.Regatta.Buero.Controllers
             {
                 FinishObject item = new FinishObject();
 
-                item.Name = file.FileName;
+                item.Name = Path.GetFileNameWithoutExtension(file.FileName);
                 item.Path =  file.FileName;
 
                 this._storageService.Add(item);
