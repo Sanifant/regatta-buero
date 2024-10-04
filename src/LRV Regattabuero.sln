@@ -14,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Buero.Frontend", "Buero.Frontend\Buero.Frontend.esproj", "{A687531F-DB42-4E43-ACB7-F6306D75B5DB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E01094FC-DF3C-4B46-9642-807DCC5EEF9C} = {E01094FC-DF3C-4B46-9642-807DCC5EEF9C}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{B87CB1D4-4C13-4056-AF97-65D709F84606}"
 	ProjectSection(SolutionItems) = preProject
