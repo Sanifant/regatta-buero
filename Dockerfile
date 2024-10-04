@@ -9,5 +9,5 @@ RUN npm run build
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:alpine AS final
-COPY --from=build /app/dist/buero.frontend /usr/share/nginx/html
-COPY proxyconf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/regatta-frontend /usr/share/nginx/html
+COPY config/proxyconf /etc/nginx/conf.d/default.conf

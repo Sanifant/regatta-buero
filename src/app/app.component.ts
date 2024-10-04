@@ -10,10 +10,8 @@ import { NgIf, NgFor } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit  {
-  
-  
-  title = 'testing';
+export class AppComponent implements OnInit  {  
+  title = 'Zielfotos';
 
   data: any;
 
