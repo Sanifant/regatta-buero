@@ -19,7 +19,7 @@ namespace LRV.Regatta.Buero.Controllers
         {
             this._storageService = storage;   
             this._configuration = config;
-            this.folderpath = this._configuration.GetValue<string>("ImageFolder")
+            this.folderpath = this._configuration.GetValue<string>("ImageFolder");
         }
 
         [HttpGet]
