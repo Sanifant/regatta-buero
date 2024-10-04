@@ -1,4 +1,4 @@
-name: ci
+name: Publish to docker hub
 
 on:
   workflow_dispatch:
@@ -26,4 +26,4 @@ jobs:
           platforms: linux/amd64
           push: true
           target: final
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}-backend:latest
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref }}
