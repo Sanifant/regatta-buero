@@ -7,12 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRV.Regatta.Buero", "LRV.Re
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A69E241B-4C63-4EAB-8BE3-0D04B8D5BF49}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
 		..\.github\workflows\docker-publish.yml = ..\.github\workflows\docker-publish.yml
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Buero.Frontend", "Buero.Frontend\Buero.Frontend.esproj", "{A687531F-DB42-4E43-ACB7-F6306D75B5DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{B87CB1D4-4C13-4056-AF97-65D709F84606}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\main.md = ..\doc\main.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

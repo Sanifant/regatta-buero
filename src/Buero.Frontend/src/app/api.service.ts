@@ -11,7 +11,7 @@ export interface finishObject {
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://9zs7cj62-5015.euw.devtunnels.ms/api/Finish';
+  private apiUrl = 'http://localhost/api/Finish';
   private apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12';
 
   constructor(private http: HttpClient) { }
