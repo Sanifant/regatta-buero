@@ -9,6 +9,9 @@ namespace LRV.Regatta.Buero.Atributes
         private const string APIKEYNAME = "ApiKey";
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+#if DEBUG
+            await next();
+#else
             if (!context.HttpContext.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
             {
                 context.Result = new ContentResult()
@@ -30,6 +33,7 @@ namespace LRV.Regatta.Buero.Atributes
                 return;
             }
             await next();
+#endif
         }
     }
 }
