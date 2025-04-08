@@ -13,6 +13,12 @@ on:
     paths:
       - src/**
 
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
+
 jobs:
   build:
 
@@ -22,14 +28,19 @@ jobs:
         working-directory: ./src
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ matrix.project }}
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ${{ matrix.project }} --no-restore
+
     - name: Test
       run: dotnet test --no-build --verbosity normal

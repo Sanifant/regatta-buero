@@ -1,4 +1,4 @@
-using LRV.Regatta.Buero.Atributes;
+using LRV.Regatta.Buero.Attributes;
 using LRV.Regatta.Buero.Models;
 using LRV.Regatta.Buero.Services;
 using Microsoft.AspNetCore.Http;
@@ -11,18 +11,34 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class RegistrationController : ControllerBase
     {
+        IStorageService storageService;
+
+        public RegistrationController(IStorageService _storageService){
+            this.storageService = _storageService;
+        }
 
         [HttpGet]
-        public IList<string> Get()
+        public IList<RegistrationObject> Get()
         {
-            List<string> returnValue = new ();
+            List<RegistrationObject> returnValue = new List<RegistrationObject>();
 
             for (int i = 0; i < 50; i++)
             {
-                returnValue.Add($"String_{i}");
+                returnValue.Add(new RegistrationObject(){
+                    Type = i%2==0 ? RegistrationType.Registration : RegistrationType.LateRegistration,
+                    Race = $"Race {i}",
+                    StartNo = $"Race {i}",
+                    Team  = $"Race {i}",
+                    ChairMan = $"Race {i}"
+                });
             }
             
             return returnValue;
+        }
+
+        [HttpPut]
+        public void AddRegistration([FromBody]RegistrationObject registration){
+
         }
     }
 }

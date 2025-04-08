@@ -1,4 +1,4 @@
-﻿using LRV.Regatta.Buero.Atributes;
+﻿using LRV.Regatta.Buero.Attributes;
 using LRV.Regatta.Buero.Models;
 using LRV.Regatta.Buero.Services;
 using Microsoft.AspNetCore.Http;
