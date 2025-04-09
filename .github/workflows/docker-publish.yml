@@ -9,7 +9,6 @@ on:
   workflow_dispatch:
   release:
     types: [published]
-    tags: [ 'v*.*.*' ]
   #pull_request:
   #  branches: [ "main" ]
 
