@@ -1,5 +1,4 @@
-<main class="main">
-  <form  (ngSubmit)="onSubmit()">
+  <form  [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div>
       <label for="type">Type:</label>
       <select formControlName="type" id="type">
@@ -8,7 +7,7 @@
     </div>
   
     <div>
-      <label for="race">Race:</label>
+      <label for="race">Rennen:</label>
       <input formControlName="race" id="race" type="text">
     </div>
   
@@ -21,23 +20,56 @@
       <label for="team">Team:</label>
       <input formControlName="team" id="team" type="text">
     </div>
-  
-    <!-- Add input fields for all optional positions -->
-    <div *ngFor="let pos of [1,2,3,4,5,6,7,8, 'Cox']">
-      <label [for]="'position' + pos">Position {{ pos }}:</label>
-      <input  [id]="'position' + pos" type="text">
+
+    <div>
+      <label for="position1">Position 1:</label>
+      <input id="position1" type="text" formControlName="position1">
     </div>
   
     <div>
-      <label for="chairMan">ChairMan:</label>
+      <label for="position2">Position 2:</label>
+      <input id="position2" type="text" formControlName="position2">
+    </div>
+  
+    <div>
+      <label for="position3">Position 3:</label>
+      <input id="position3" type="text" formControlName="position3">
+    </div>
+  
+    <div>
+      <label for="position4">Position 4:</label>
+      <input id="position4" type="text" formControlName="position4">
+    </div>
+  
+    <div>
+      <label for="position5">Position 5:</label>
+      <input id="position5" type="text" formControlName="position5">
+    </div>
+  
+    <div>
+      <label for="position6">Position 6:</label>
+      <input id="position6" type="text" formControlName="position6">
+    </div>
+  
+    <div>
+      <label for="position7">Position 7:</label>
+      <input id="position7" type="text" formControlName="position7">
+    </div>
+  
+    <div>
+      <label for="position8">Position 8:</label>
+      <input id="position8" type="text" formControlName="position8">
+    </div>
+  
+    <div>
+      <label for="positionCox">Steuermann:</label>
+      <input id="positionCox" type="text" formControlName="positionCox">
+    </div>
+  
+    <div>
+      <label for="chairMan">Obmann:</label>
       <input formControlName="chairMan" id="chairMan" type="text">
     </div>
   
-    <div>
-      <label for="requestedAt">Requested At:</label>
-      <input formControlName="requestedAt" id="requestedAt" type="date">
-    </div>
-  
-    <button type="submit">Submit</button>
+    <button type="submit">Abschicken</button>
   </form>
-</main>

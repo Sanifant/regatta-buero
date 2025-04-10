@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { FinishPhotoComponent } from './finish-photo/finish-photo.component';
-import { RegistrationComponent } from './registration/registration.component'
+import { RegistrationComponent } from './registration/registration.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,7 +16,14 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    declarations: [
+      
+    ],
+    imports: [
+        RouterModule.forRoot(routes),
+        BrowserModule,
+        FormsModule, 
+        ReactiveFormsModule],
     exports: [RouterModule]
   })
   export class AppRoutingModule { }

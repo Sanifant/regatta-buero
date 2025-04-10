@@ -23,7 +23,6 @@ interface RegistrationObject {
   position8?: string;
   positionCox?: string;
   chairMan: string;
-  requestedAt: Date;
 }
 
 @Component({
@@ -52,8 +51,7 @@ export class RegistrationComponent  implements OnInit {
       position7: [''],
       position8: [''],
       positionCox: [''],
-      chairMan: ['', Validators.required],
-      requestedAt: ['', Validators.required]
+      chairMan: ['', Validators.required]
     }); 
   }
 
