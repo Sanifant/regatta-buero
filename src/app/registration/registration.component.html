@@ -1,0 +1,42 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="type">Type:</label>
+      <select formControlName="type" id="type">
+        <option *ngFor="let type of registrationTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+  
+    <div>
+      <label for="race">Race:</label>
+      <input formControlName="race" id="race" type="text">
+    </div>
+  
+    <div>
+      <label for="startNo">Start No:</label>
+      <input formControlName="startNo" id="startNo" type="text">
+    </div>
+  
+    <div>
+      <label for="team">Team:</label>
+      <input formControlName="team" id="team" type="text">
+    </div>
+  
+    <!-- Add input fields for all optional positions -->
+    <div *ngFor="let pos of [1,2,3,4,5,6,7,8, 'Cox']">
+      <label [for]="'position' + pos">Position {{ pos }}:</label>
+      <input [formControlName]="'position' + pos" [id]="'position' + pos" type="text">
+    </div>
+  
+    <div>
+      <label for="chairMan">ChairMan:</label>
+      <input formControlName="chairMan" id="chairMan" type="text">
+    </div>
+  
+    <div>
+      <label for="requestedAt">Requested At:</label>
+      <input formControlName="requestedAt" id="requestedAt" type="date">
+    </div>
+  
+    <button type="submit">Submit</button>
+  </form>
+  
