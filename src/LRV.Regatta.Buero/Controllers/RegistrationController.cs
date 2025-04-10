@@ -11,10 +11,10 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class RegistrationController : ControllerBase
     {
-        IStorageService storageService;
+        private readonly IDataService dataService;
 
-        public RegistrationController(IStorageService _storageService){
-            this.storageService = _storageService;
+        public RegistrationController(IDataService data){
+            this.dataService = data;
         }
 
         [HttpGet]
@@ -39,6 +39,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpPut]
         public void AddRegistration([FromBody]RegistrationObject registration){
 
+            this.dataService.AddRegistration(registration);
         }
     }
 }

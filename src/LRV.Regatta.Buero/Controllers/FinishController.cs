@@ -11,9 +11,9 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class FinishController : ControllerBase
     {
-        private IStorageService _storageService;
-        private IConfiguration _configuration;
-        private string folderpath;
+        private readonly IStorageService _storageService;
+        private readonly IConfiguration _configuration;
+        private readonly string folderpath;
 
         public FinishController(IStorageService storage, IConfiguration config)
         {

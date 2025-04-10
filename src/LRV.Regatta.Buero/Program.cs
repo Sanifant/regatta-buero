@@ -1,5 +1,6 @@
 
 using LRV.Regatta.Buero.Services;
+using Microsoft.OpenApi.Models;
 
 namespace LRV.Regatta.Buero
 {
@@ -23,6 +24,7 @@ namespace LRV.Regatta.Buero
 
             // Add services to the container.
             builder.Services.AddSingleton<IStorageService, FileStorageService>();
+            builder.Services.AddSingleton<IDataService, PostgresDataService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
