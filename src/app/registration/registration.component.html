@@ -1,4 +1,5 @@
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+<main class="main">
+  <form  (ngSubmit)="onSubmit()">
     <div>
       <label for="type">Type:</label>
       <select formControlName="type" id="type">
@@ -24,7 +25,7 @@
     <!-- Add input fields for all optional positions -->
     <div *ngFor="let pos of [1,2,3,4,5,6,7,8, 'Cox']">
       <label [for]="'position' + pos">Position {{ pos }}:</label>
-      <input [formControlName]="'position' + pos" [id]="'position' + pos" type="text">
+      <input  [id]="'position' + pos" type="text">
     </div>
   
     <div>
@@ -39,4 +40,4 @@
   
     <button type="submit">Submit</button>
   </form>
-  
+</main>

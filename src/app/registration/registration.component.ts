@@ -37,9 +37,7 @@ export class RegistrationComponent  implements OnInit {
   registrationForm: FormGroup;
   registrationTypes = Object.values(RegistrationType);
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit(): void {
+  constructor(private fb: FormBuilder) {
     this.registrationForm = this.fb.group({
       type: [RegistrationType.Registration, Validators.required],
       race: ['', Validators.required],
@@ -56,7 +54,10 @@ export class RegistrationComponent  implements OnInit {
       positionCox: [''],
       chairMan: ['', Validators.required],
       requestedAt: ['', Validators.required]
-    });
+    }); 
+  }
+
+  ngOnInit(): void {
   }
 
   onSubmit() {
