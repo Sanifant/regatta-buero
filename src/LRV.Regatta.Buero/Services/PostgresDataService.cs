@@ -2,7 +2,7 @@
 
 namespace LRV.Regatta.Buero.Services
 {
-    public class PostgresDataService : IDataService
+    public class PostgresRegistrationService : IRegistrationService
     {
         public void AddRegistration(RegistrationObject registration)
         {

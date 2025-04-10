@@ -2,6 +2,7 @@ namespace LRV.Regatta.Buero.Models
 {
     public class RegistrationObject
     {
+        public int Id { get; set; }
         public RegistrationType Type {get; set;}
         public required string Race { get; set; }
         public required string StartNo { get; set; }

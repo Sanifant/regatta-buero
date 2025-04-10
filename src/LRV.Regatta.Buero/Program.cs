@@ -1,6 +1,9 @@
 
 using LRV.Regatta.Buero.Services;
+using LRV.Regatta.Buero.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LRV.Regatta.Buero
 {
@@ -23,8 +26,12 @@ namespace LRV.Regatta.Buero
 
 
             // Add services to the container.
-            builder.Services.AddSingleton<IStorageService, FileStorageService>();
-            builder.Services.AddSingleton<IDataService, PostgresDataService>();
+            builder.Services.AddSingleton<IFinishService, MemoryFinishService>();
+            builder.Services.AddSingleton<IRegistrationService, PostgresRegistrationService>();
+
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"))
+            );
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

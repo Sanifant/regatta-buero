@@ -11,13 +11,13 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class FinishController : ControllerBase
     {
-        private readonly IStorageService _storageService;
+        private readonly IFinishService _finishService;
         private readonly IConfiguration _configuration;
         private readonly string folderpath;
 
-        public FinishController(IStorageService storage, IConfiguration config)
+        public FinishController(IFinishService storage, IConfiguration config)
         {
-            this._storageService = storage;   
+            this._finishService = storage;   
             this._configuration = config;
             this.folderpath = this._configuration.GetValue<string>("ImageFolder");
         }
@@ -25,7 +25,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpGet]
         public IList<FinishObject> Get()
         {
-            return this._storageService.GetAll();
+            return this._finishService.GetAll();
         }
 
         [HttpPost]
@@ -43,10 +43,11 @@ namespace LRV.Regatta.Buero.Controllers
             {
                 FinishObject item = new FinishObject();
 
+                item.Id = this._finishService.GetAll().Count + 1;
                 item.Name = Path.GetFileNameWithoutExtension(file.FileName);
                 item.Path =  file.FileName;
 
-                this._storageService.Add(item);
+                this._finishService.Add(item);
                 string filePath = Path.Combine(folderpath, file.FileName);
                 Console.WriteLine($"\tSaving file to {filePath}.");
 

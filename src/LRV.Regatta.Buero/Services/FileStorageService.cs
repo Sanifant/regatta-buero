@@ -2,11 +2,11 @@
 
 namespace LRV.Regatta.Buero.Services
 {
-    public class FileStorageService : IStorageService
+    public class MemoryFinishService : IFinishService
     {
         private List<FinishObject> _finishObjects;
 
-        public FileStorageService()
+        public MemoryFinishService()
         {
             _finishObjects = new List<FinishObject>();
         }

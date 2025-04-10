@@ -2,7 +2,7 @@
 
 namespace LRV.Regatta.Buero.Services
 {
-    public interface IDataService
+    public interface IRegistrationService
     {
         void AddRegistration(RegistrationObject registration);
     }

@@ -23,7 +23,8 @@
 				"streetsidesoftware.code-spell-checker",
 				"davidanson.vscode-markdownlint",
                 "GitHub.vscode-github-actions",
-                "ms-dotnettools.csdevkit"
+                "ms-dotnettools.csdevkit",
+				"ms-ossdata.vscode-postgresql"
 			]
 		}
 	},

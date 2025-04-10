@@ -2,7 +2,7 @@
 
 namespace LRV.Regatta.Buero.Services
 {
-    public interface IStorageService
+    public interface IFinishService
     {
         void Add(FinishObject @object);
         IList<FinishObject> GetAll();

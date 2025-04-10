@@ -11,9 +11,9 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class RegistrationController : ControllerBase
     {
-        private readonly IDataService dataService;
+        private readonly IRegistrationService dataService;
 
-        public RegistrationController(IDataService data){
+        public RegistrationController(IRegistrationService data){
             this.dataService = data;
         }
 
