@@ -23,7 +23,7 @@ jobs:
         project: [
             src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
             ]
-    runs-on: ${{ matric.os }}
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./src
