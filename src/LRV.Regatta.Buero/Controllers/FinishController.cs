@@ -22,6 +22,10 @@ namespace LRV.Regatta.Buero.Controllers
             this.folderpath = this._configuration.GetValue<string>("ImageFolder");
         }
 
+        /// <summary>
+        /// Processes the GET HTTP Verb
+        /// </summary>
+        /// <returns>List of all Finish Objects</returns>
         [HttpGet]
         public IList<FinishObject> Get()
         {
