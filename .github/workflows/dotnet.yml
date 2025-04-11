@@ -16,15 +16,18 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src
     strategy:
       fail-fast: false
       matrix:
-        project:
-            - src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
+        os: [windows-latest, ubuntu-latest]
+        project: [
+            src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
+            ]
+    runs-on: ${{ matric.os }}
+    defaults:
+      run:
+        working-directory: ./src
+
 
     steps:
     - name: Checkout repository
