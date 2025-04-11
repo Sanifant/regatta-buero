@@ -1,30 +1,29 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Unter https://aka.ms/customizecontainer erfahren Sie, wie Sie Ihren Debugcontainer anpassen und wie Visual Studio dieses Dockerfile verwendet, um Ihre Images für ein schnelleres Debuggen zu erstellen.
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
+# Diese Stufe wird verwendet, wenn sie von VS im Schnellmodus ausgeführt wird (Standardeinstellung für Debugkonfiguration).
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 
 
-# This stage is used to build the service project
+# Diese Stufe wird zum Erstellen des Dienstprojekts verwendet.
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-#WORKDIR /src
-COPY ["LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
+WORKDIR /src
+COPY ["LRV.Regatta.Buero/LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
 RUN dotnet restore "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj"
-COPY . ./LRV.Regatta.Buero
-# WORKDIR "/src/"
-RUN dotnet build "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY . .
+WORKDIR "/src/LRV.Regatta.Buero"
+RUN dotnet build "./LRV.Regatta.Buero.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Diese Stufe wird verwendet, um das Dienstprojekt zu veröffentlichen, das in die letzte Phase kopiert werden soll.
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./LRV.Regatta.Buero.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Diese Stufe wird in der Produktion oder bei Ausführung von VS im regulären Modus verwendet (Standard, wenn die Debugkonfiguration nicht verwendet wird).
 FROM base AS final
 WORKDIR /app
-VOLUME /app/images
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LRV.Regatta.Buero.dll"]

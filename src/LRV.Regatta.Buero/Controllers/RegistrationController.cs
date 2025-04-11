@@ -20,18 +20,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpGet]
         public IList<RegistrationObject> Get()
         {
-            List<RegistrationObject> returnValue = new List<RegistrationObject>();
-
-            for (int i = 0; i < 50; i++)
-            {
-                returnValue.Add(new RegistrationObject(){
-                    Type = i%2==0 ? RegistrationType.Registration : RegistrationType.LateRegistration,
-                    Race = $"Race {i}",
-                    StartNo = $"Race {i}",
-                    Team  = $"Race {i}",
-                    ChairMan = $"Race {i}"
-                });
-            }
+            List<RegistrationObject> returnValue = this.dataService.GetRegistrations();
             
             return returnValue;
         }

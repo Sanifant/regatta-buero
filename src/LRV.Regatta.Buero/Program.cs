@@ -1,9 +1,10 @@
 
 using LRV.Regatta.Buero.Services;
 using LRV.Regatta.Buero.Models;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace LRV.Regatta.Buero
 {
@@ -24,14 +25,16 @@ namespace LRV.Regatta.Buero
                                   });
             });
 
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("DatabaseConnection"),
+                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DatabaseConnection"))
+                )
+            );
 
             // Add services to the container.
-            builder.Services.AddSingleton<IFinishService, MemoryFinishService>();
-            builder.Services.AddSingleton<IRegistrationService, PostgresRegistrationService>();
-
-            builder.Services.AddDbContext<DatabaseContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"))
-            );
+            builder.Services.AddScoped<IFinishService, MemoryFinishService>();
+            builder.Services.AddScoped<IRegistrationService, MysqlRegistrationService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,11 +53,21 @@ namespace LRV.Regatta.Buero
             app.UseCors("origin");
 
             app.UseAuthorization();
-
-
             app.MapControllers();
 
+            using IServiceScope scope = app.Services.CreateScope();
+
+            ApplyMigration<DatabaseContext>(scope);
+
             app.Run();
+        }
+
+        public static void ApplyMigration<TDbContext>(IServiceScope scope) where TDbContext : DbContext
+        {
+            using TDbContext context = scope.ServiceProvider
+                .GetRequiredService<TDbContext>();
+
+            context.Database.Migrate();
         }
     }
 }
