@@ -13,12 +13,6 @@ on:
     paths:
       - src/**
 
-    strategy:
-      fail-fast: false
-      matrix:
-        project:
-          - src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
-
 jobs:
   build:
 
@@ -26,6 +20,11 @@ jobs:
     defaults:
       run:
         working-directory: ./src
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+            - src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
 
     steps:
     - name: Checkout repository
