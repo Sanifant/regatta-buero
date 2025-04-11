@@ -19,9 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
         project: [
-            src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
+            LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
             ]
     runs-on: ${{ matrix.os }}
     defaults:
@@ -39,7 +39,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore ${{ matrix.project }}
+      run: dotnet restore #${{ matrix.project }}
 
     - name: Build
       run: dotnet build ${{ matrix.project }} --no-restore
