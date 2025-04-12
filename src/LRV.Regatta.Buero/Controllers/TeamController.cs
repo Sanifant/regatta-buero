@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace LRV.Regatta.Buero.Controllers
 {
@@ -46,9 +47,28 @@ namespace LRV.Regatta.Buero.Controllers
         }
 
         [HttpGet]
-        public List<TeamObject> GetTeamObjects(string name = "")
+        public List<TeamObject> GetTeams()
         {
             return this.dbContext.TeamObjects.ToList();
+        }
+
+        [HttpGet("select")]
+        public async Task<IActionResult> GetTeam([FromQuery] string teamName) {
+
+            if (string.IsNullOrWhiteSpace(teamName) || teamName.Length < 3)
+                return BadRequest("Query must be at least 3 characters long.");
+
+            teamName = $"%{teamName}%";
+
+            var results = await this.dbContext.TeamObjects
+            .Where(team =>
+                EF.Functions.Like(team.Name, teamName) ||
+                EF.Functions.Like(team.Kurzform, teamName) ||
+                EF.Functions.Like(team.Lettern, teamName)
+                    )
+                .ToListAsync();
+
+            return Ok(results);
         }
     }
 }
