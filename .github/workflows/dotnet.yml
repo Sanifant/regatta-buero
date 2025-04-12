@@ -4,6 +4,7 @@
 name: .NET
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
     paths:
@@ -21,7 +22,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         project: [
-            LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
+            'LRV Regattabuero.sln'
             ]
     runs-on: ${{ matrix.os }}
     defaults:
