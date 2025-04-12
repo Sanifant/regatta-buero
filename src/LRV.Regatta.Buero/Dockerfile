@@ -11,11 +11,9 @@ EXPOSE 8080
 # Diese Stufe wird zum Erstellen des Dienstprojekts verwendet.
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["LRV.Regatta.Buero/LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
+COPY ["LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
 RUN dotnet restore "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj"
 COPY . ./LRV.Regatta.Buero
-WORKDIR /src
 RUN dotnet build "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Diese Stufe wird verwendet, um das Dienstprojekt zu veröffentlichen, das in die letzte Phase kopiert werden soll.
