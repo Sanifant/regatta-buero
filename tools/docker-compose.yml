@@ -1,0 +1,40 @@
+services:
+
+  regattadb:
+    image: mariadb:latest
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example_root_password
+      MYSQL_DATABASE: regatta_database
+      MYSQL_USER: regatta
+      MYSQL_PASSWORD: regatta
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: regattadb
+      PMA_USER: regatta
+      PMA_PASSWORD: regatta
+    restart: unless-stopped
+    depends_on:
+      - regattadb
+  
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+
+  redisInsights:
+    image: redis/redisinsight:latest
+    ports:
+      - 5540:5540
+    depends_on:
+      - redis
+    environment:
+      - RI_REDIS_HOST=redis
