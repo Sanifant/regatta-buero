@@ -31,7 +31,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: ./src/LRV.Regatta.Buero
+        working-directory: ./src
 
     steps:
       - name: Checkout repository
