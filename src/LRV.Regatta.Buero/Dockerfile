@@ -12,7 +12,7 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
+COPY ["LRV.Regatta.Buero/LRV.Regatta.Buero.csproj", "LRV.Regatta.Buero/"]
 RUN dotnet restore "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj"
 COPY . ./LRV.Regatta.Buero
 WORKDIR /src
