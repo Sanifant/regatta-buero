@@ -34,6 +34,7 @@ namespace LRV.Regatta.Buero
             // Baue Connection String
             var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
 
+            Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using {dbUser}-{dbPassword}");
 
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
