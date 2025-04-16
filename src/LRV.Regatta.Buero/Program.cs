@@ -25,10 +25,20 @@ namespace LRV.Regatta.Buero
                                   });
             });
 
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "3306"; // Default-Port
+            var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "regatta_database";
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "regatta";
+            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "regatta";
+
+            // Baue Connection String
+            var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
+
+
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
-                    builder.Configuration.GetConnectionString("DatabaseConnection"),
-                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DatabaseConnection"))
+                    connectionString,
+                    ServerVersion.AutoDetect(connectionString)
                 )
             );
 
