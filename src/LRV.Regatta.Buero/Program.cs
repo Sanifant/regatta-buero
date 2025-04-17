@@ -10,6 +10,10 @@ namespace LRV.Regatta.Buero
 {
     public class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -31,15 +35,15 @@ namespace LRV.Regatta.Buero
             var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "regatta";
             var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "regatta";
 
-            // Baue Connection String
             var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
 
             Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using {dbUser}-{dbPassword}");
 
+            MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(10, 5, 9));
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
                     connectionString,
-                    ServerVersion.AutoDetect(connectionString)
+                    serverVersion
                 )
             );
 

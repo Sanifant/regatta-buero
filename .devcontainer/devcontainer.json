@@ -24,21 +24,21 @@
 				"davidanson.vscode-markdownlint",
                 "GitHub.vscode-github-actions",
                 "ms-dotnettools.csdevkit",
-				"ms-ossdata.vscode-postgresql"
+				"Redis.redis-for-vscode",
+				"Oracle.mysql-shell-for-vs-code"
 			]
 		}
 	},
 	"forwardPorts": [
 		5000, 
-		5001, 
-		5432],
+		5015],
     "portsAttributes": {
         "5000": {
             "label": "Mail Stub",
             "onAutoForward": "notify"
         },
-        "8081": {
-            "label": "Weather Front End",
+        "5015": {
+            "label": "Regatta Backend",
             "onAutoForward": "notify"
         }
     },
