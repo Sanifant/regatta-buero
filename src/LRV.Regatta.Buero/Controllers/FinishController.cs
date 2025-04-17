@@ -33,7 +33,8 @@ namespace LRV.Regatta.Buero.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OnPostUploadAsync([FromForm] IFormFile file)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageUploadRequest file)
         {
             if (!Directory.Exists(folderpath))
             {
@@ -43,21 +44,21 @@ namespace LRV.Regatta.Buero.Controllers
                 Console.WriteLine("");
             }
 
-            if (file.Length > 0)
+            if (file.File.Length > 0)
             {
                 FinishObject item = new FinishObject();
 
                 item.Id = this._finishService.GetAll().Count + 1;
-                item.Name = Path.GetFileNameWithoutExtension(file.FileName);
-                item.Path =  file.FileName;
+                item.Name = Path.GetFileNameWithoutExtension(file.File.FileName);
+                item.Path =  file.File.FileName;
 
                 this._finishService.Add(item);
-                string filePath = Path.Combine(folderpath, file.FileName);
+                string filePath = Path.Combine(folderpath, file.File.FileName);
                 Console.WriteLine($"\tSaving file to {filePath}.");
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
-                    await file.CopyToAsync(stream);
+                    await file.File.CopyToAsync(stream);
                 }
             }
 

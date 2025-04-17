@@ -17,6 +17,10 @@ namespace LRV.Regatta.Buero.Controllers
             this.dataService = data;
         }
 
+        /// <summary>
+        /// Gets this instance.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IList<RegistrationObject> Get()
         {
@@ -25,6 +29,10 @@ namespace LRV.Regatta.Buero.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Adds the registration.
+        /// </summary>
+        /// <param name="registration">The registration.</param>
         [HttpPut]
         public void AddRegistration([FromBody]RegistrationObject registration){
 
