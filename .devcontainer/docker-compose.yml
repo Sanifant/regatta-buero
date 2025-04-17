@@ -20,7 +20,7 @@ services:
 
   db:
     container_name: ${DB_HOST}
-    image: mysql:8.3
+    image: mariadb:lts
     restart: unless-stopped
     volumes:
       - mysql-data:/var/lib/mysql

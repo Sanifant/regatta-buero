@@ -6,12 +6,10 @@ namespace LRV.Regatta.Buero.Attributes
     [AttributeUsage(validOn: AttributeTargets.Class)]
     public class ApiKeyAttribute : Attribute, IAsyncActionFilter
     {
-        private const string APIKEYNAME = "ApiKey";
+        public static string APIKEYNAME = "X-API-KEY";
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-#if DEBUG
-            await next();
-#else
             if (!context.HttpContext.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
             {
                 context.Result = new ContentResult()
@@ -33,7 +31,6 @@ namespace LRV.Regatta.Buero.Attributes
                 return;
             }
             await next();
-#endif
         }
     }
 }

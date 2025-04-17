@@ -13,7 +13,7 @@ namespace LRV.Regatta.Buero.Services
 
         public void AddRegistration(RegistrationObject registration)
         {
-            this.databaseContext.Update(registration);
+            this.databaseContext.Add(registration);
             this.databaseContext.SaveChanges();
         }
 

@@ -40,7 +40,7 @@ namespace LRV.Regatta.Buero
 
             Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using {dbUser}-{dbPassword}");
 
-            MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(10, 5, 9));
+            MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(11, 4, 5));
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
                     connectionString,
@@ -51,12 +51,10 @@ namespace LRV.Regatta.Buero
                 .EnableDetailedErrors()
             );
 
-            // Add services to the container.
             builder.Services.AddScoped<IFinishService, MemoryFinishService>();
             builder.Services.AddScoped<IRegistrationService, MysqlRegistrationService>();
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -70,6 +68,32 @@ namespace LRV.Regatta.Buero
 
                 c.IgnoreObsoleteActions();
                 c.IncludeXmlComments(Assembly.GetExecutingAssembly());
+
+                // Füge die API Key-Definition hinzu
+                c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "X-API-KEY",
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Fügen Sie hier den API Key ein"
+                });
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "ApiKey"
+                            }
+                        },
+                        new List<string>()
+                    }
+                };
+
+                c.AddSecurityRequirement(securityRequirement);
             });
 
             var app = builder.Build();
