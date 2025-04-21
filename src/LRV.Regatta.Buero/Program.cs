@@ -38,7 +38,7 @@ namespace LRV.Regatta.Buero
 
             var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
 
-            Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using {dbUser}-{dbPassword}");
+            Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using \"{connectionString}\"");
 
             MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(10, 5, 9));
             builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -53,7 +53,7 @@ namespace LRV.Regatta.Buero
 
             // Add services to the container.
             builder.Services.AddScoped<IFinishService, MemoryFinishService>();
-            builder.Services.AddScoped<IRegistrationService, MysqlRegistrationService>();
+            builder.Services.AddScoped<IRegistrationService, MysqlDataService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

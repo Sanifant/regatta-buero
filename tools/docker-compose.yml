@@ -3,7 +3,6 @@ services:
   regattadb:
     image: mariadb:latest
     command: '--default-authentication-plugin=mysql_native_password'
-    restart: always
     ports:
       - 3306:3306
     environment:
@@ -20,13 +19,11 @@ services:
       PMA_HOST: regattadb
       PMA_USER: regatta
       PMA_PASSWORD: regatta
-    restart: unless-stopped
     depends_on:
       - regattadb
   
   redis:
     image: redis
-    restart: always
     ports:
       - 6379:6379
 
