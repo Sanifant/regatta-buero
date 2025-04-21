@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { FinishPhotoComponent } from './finish-photo/finish-photo.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 export const routes: Routes = [
@@ -22,8 +22,7 @@ export const routes: Routes = [
     imports: [
         RouterModule.forRoot(routes),
         BrowserModule,
-        FormsModule, 
-        ReactiveFormsModule],
+        FormsModule],
     exports: [RouterModule]
   })
   export class AppRoutingModule { }

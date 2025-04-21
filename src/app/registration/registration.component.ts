@@ -1,69 +1,53 @@
-import { Component, OnInit } from '@angular/core';
-
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-enum RegistrationType {
-  Registration = "Registration",
-  LateRegistration = "LateRegistration",
-  Reregistration = "Reregistration"
-}
-
-interface RegistrationObject {
-  type: RegistrationType;
-  race: string;
-  startNo: string;
-  team: string;
-  position1?: string;
-  position2?: string;
-  position3?: string;
-  position4?: string;
-  position5?: string;
-  position6?: string;
-  position7?: string;
-  position8?: string;
-  positionCox?: string;
-  chairMan: string;
-}
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Registration, RegistrationType } from '../models/registration.model';
+import { RegistrationService } from '../services/registration.service';
+import { HttpClient } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.css'
 })
 
-export class RegistrationComponent  implements OnInit {
+export class RegistrationComponent {
   
-  registrationForm: FormGroup;
   registrationTypes = Object.values(RegistrationType);
+  newRegistration: Registration = new Registration();
+  searchTerm = '';
+  results: any[] = [];
+  private searchSubject = new Subject<string>();
 
-  constructor(private fb: FormBuilder) {
-    this.registrationForm = this.fb.group({
-      type: [RegistrationType.Registration, Validators.required],
-      race: ['', Validators.required],
-      startNo: ['', Validators.required],
-      team: ['', Validators.required],
-      position1: [''],
-      position2: [''],
-      position3: [''],
-      position4: [''],
-      position5: [''],
-      position6: [''],
-      position7: [''],
-      position8: [''],
-      positionCox: [''],
-      chairMan: ['', Validators.required]
-    }); 
+
+  constructor() {
+    this.searchSubject.pipe(
+      filter(term => term.length >= 3),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => RegistrationService.searchTrainer(term))
+    ).subscribe(data => this.results = data);
+
   }
 
-  ngOnInit(): void {
+  onSearchChange(term: string) {
+    this.searchSubject.next(term);
   }
 
   onSubmit() {
-    if (this.registrationForm.valid) {
-      const registration: RegistrationObject = this.registrationForm.value;
-      console.log('Registration Object:', registration);
-    } else {
-      console.error('Form is invalid');
-    }
+  }
+
+  onReset() {
+    this.newRegistration = new Registration();
+  }
+
+  get jsonData() {
+    return JSON.stringify(this.newRegistration, null, 2);
   }
 }

@@ -11,8 +11,8 @@ export interface finishObject {
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://buero.luebeckregatta.de/api/Finish'; // Replace with your API URL
-  private apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12'; // Replace with your API key
+  private readonly apiUrl = 'https://buero.luebeckregatta.de/api/Finish';
+  private readonly apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12';
 
   constructor(private http: HttpClient) { }
 
