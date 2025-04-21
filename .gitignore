@@ -396,4 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+src/LRV.Regatta.Buero/Regatta-Test/*.*
 /src/.idea/.idea.LRV Regattabuero/.idea
