@@ -1,0 +1,13 @@
+.form-group {
+  margin: 5px;
+}
+
+div.form-group label {
+  font-weight: bold;
+  width: 100px;
+}
+div.form-group button {
+  font-weight: bold;
+  padding-right: 50px;
+  text-align: center;
+}
