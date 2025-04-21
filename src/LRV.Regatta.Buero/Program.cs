@@ -36,7 +36,7 @@ namespace LRV.Regatta.Buero
             var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "regatta";
             var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "regatta";
 
-            var connectionString = $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={dbPassword};";
+            var connectionString = $"Server={dbHost};Database={dbName};User={dbUser};Password={dbPassword};";
 
             Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using \"{connectionString}\"");
 
