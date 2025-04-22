@@ -35,8 +35,14 @@ namespace LRV.Regatta.Buero.Controllers
                 using var stringReader = new StringReader(xmlContent);
                 var meldungen = (RegattaMeldungen)serializer.Deserialize(stringReader);
 
-                this.dbContext.TeamObjects.AddRange(meldungen.Vereine);
-                this.dbContext.SaveChanges();
+                if (meldungen != null)
+                {
+                    this.dbContext.TeamObjects.ExecuteDelete();
+                    this.dbContext.SaveChanges();
+
+                    this.dbContext.TeamObjects.AddRange(meldungen.Vereine);
+                    this.dbContext.SaveChanges();
+                }
 
                 return Ok();
             }

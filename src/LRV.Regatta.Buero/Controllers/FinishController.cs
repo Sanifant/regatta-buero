@@ -44,23 +44,30 @@ namespace LRV.Regatta.Buero.Controllers
                 Console.WriteLine("");
             }
 
-            if (file.File.Length > 0)
+            FinishObject item = new FinishObject();
+
+            item.Id = this._finishService.GetAll().Count + 1;
+            item.Name = $"Zieleinlauf {file.FinishTime:dd.MM.yyyy HH:mm:ss.fff}";
+            item.FirstPath = file.FirstPhotoFile.FileName;
+            item.SecondPath = file.SecondPhotoFile.FileName;
+
+
+            string filePath = Path.Combine(folderpath, file.FirstPhotoFile.FileName);
+            Console.WriteLine($"\tSaving file to {filePath}.");
+
+            using (var stream = System.IO.File.Create(filePath))
             {
-                FinishObject item = new FinishObject();
-
-                item.Id = this._finishService.GetAll().Count + 1;
-                item.Name = Path.GetFileNameWithoutExtension(file.File.FileName);
-                item.Path =  file.File.FileName;
-
-                this._finishService.Add(item);
-                string filePath = Path.Combine(folderpath, file.File.FileName);
-                Console.WriteLine($"\tSaving file to {filePath}.");
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await file.File.CopyToAsync(stream);
-                }
+                await file.FirstPhotoFile.CopyToAsync(stream);
             }
+            filePath = Path.Combine(folderpath, file.SecondPhotoFile.FileName);
+            Console.WriteLine($"\tSaving file to {filePath}.");
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.FirstPhotoFile.CopyToAsync(stream);
+                }
+
+            this._finishService.Add(item);
 
             return Ok();
         }

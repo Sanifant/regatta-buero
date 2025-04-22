@@ -8,9 +8,12 @@ namespace LRV.Regatta.Buero.Models
     public class ImageUploadRequest
     {
         [FromForm]
-        public IFormFile File { get; set; }
+        public DateTime FinishTime { get; set; }
 
         [FromForm]
-        public string Description { get; set; }
+        public IFormFile FirstPhotoFile { get; set; }
+
+        [FromForm]
+        public IFormFile SecondPhotoFile { get; set; }
     }
 }
