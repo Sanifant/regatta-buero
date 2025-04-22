@@ -20,7 +20,9 @@ namespace LRV.Regatta.Buero.Attributes
                 return;
             }
             var appSettings = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-            var apiKey = appSettings.GetValue<string>(APIKEYNAME);
+            var apiKey = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(APIKEYNAME)) ?
+                Environment.GetEnvironmentVariable(APIKEYNAME) :
+                appSettings.GetValue<string>(APIKEYNAME);
             if (!apiKey.Equals(extractedApiKey))
             {
                 context.Result = new ContentResult()

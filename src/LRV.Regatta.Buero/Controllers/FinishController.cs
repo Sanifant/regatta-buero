@@ -11,6 +11,7 @@ namespace LRV.Regatta.Buero.Controllers
     [ApiController]
     public class FinishController : ControllerBase
     {
+        private const string Key = "ImageFolder";
         private readonly IFinishService _finishService;
         private readonly IConfiguration _configuration;
         private readonly string folderpath;
@@ -19,7 +20,9 @@ namespace LRV.Regatta.Buero.Controllers
         {
             this._finishService = storage;   
             this._configuration = config;
-            this.folderpath = this._configuration.GetValue<string>("ImageFolder");
+            this.folderpath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(Key)) ?
+                Environment.GetEnvironmentVariable(Key) :
+                this._configuration.GetValue<string>(Key);
         }
 
         /// <summary>
