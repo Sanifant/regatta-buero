@@ -18,7 +18,7 @@ namespace LRV.Regatta.Buero.Controllers
 
         public FinishController(IFinishService storage, IConfiguration config)
         {
-            this._finishService = storage;   
+            this._finishService = storage;
             this._configuration = config;
             this.folderpath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(Key)) ?
                 Environment.GetEnvironmentVariable(Key) :
@@ -32,7 +32,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpGet]
         public IList<FinishObject> Get()
         {
-            return this._finishService.GetAll();
+            return this._finishService.GetAllFinishObject();
         }
 
         [HttpPost]
@@ -49,7 +49,7 @@ namespace LRV.Regatta.Buero.Controllers
 
             FinishObject item = new FinishObject();
 
-            item.Id = this._finishService.GetAll().Count + 1;
+            item.Id = this._finishService.GetAllFinishObject().Count + 1;
             item.Name = $"Zieleinlauf {file.FinishTime:dd.MM.yyyy HH:mm:ss.fff}";
             item.FirstPath = file.FirstPhotoFile.FileName;
             item.SecondPath = file.SecondPhotoFile.FileName;
@@ -68,10 +68,37 @@ namespace LRV.Regatta.Buero.Controllers
             using (var stream = System.IO.File.Create(filePath))
             {
                 await file.FirstPhotoFile.CopyToAsync(stream);
-                }
+            }
 
-            this._finishService.Add(item);
+            this._finishService.AddFinishObject(item);
 
+            return Ok();
+        }
+
+
+        [HttpDelete()]
+        public IActionResult Delete()
+        {
+            this._finishService.DeleteAllFinishObject();
+
+            foreach (var file in Directory.GetFiles(folderpath))
+            {
+                System.IO.File.Delete(file);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var item = this._finishService.GetAllFinishObject().FirstOrDefault(x => x.Id == id);
+            if (item != null)
+            {
+                this._finishService.DeleteFinishObject(item);
+                System.IO.File.Delete(Path.Combine(folderpath, item.FirstPath));
+                System.IO.File.Delete(Path.Combine(folderpath, item.SecondPath));
+            }
             return Ok();
         }
     }

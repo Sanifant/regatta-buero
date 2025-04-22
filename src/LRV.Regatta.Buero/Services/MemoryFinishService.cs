@@ -11,12 +11,22 @@ namespace LRV.Regatta.Buero.Services
             _finishObjects = new List<FinishObject>();
         }
 
-        public void Add(FinishObject @object)
+        public void AddFinishObject(FinishObject @object)
         {
             _finishObjects.Add(@object);
         }
 
-        public IList<FinishObject> GetAll()
+        public void DeleteAllFinishObject()
+        {
+            _finishObjects.Clear();
+        }
+
+        public void DeleteFinishObject(FinishObject item)
+        {
+            _finishObjects.Remove(item);
+        }
+
+        public IList<FinishObject> GetAllFinishObject()
         {
             return _finishObjects;
         }

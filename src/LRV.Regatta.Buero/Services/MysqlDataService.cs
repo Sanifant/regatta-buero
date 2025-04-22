@@ -18,16 +18,6 @@ namespace LRV.Regatta.Buero.Services
             this.databaseContext = context;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="object"></param>
-        public void Add(FinishObject @object)
-        {
-            this.databaseContext.FinishObjects.Add(@object);
-            this.databaseContext.SaveChanges();
-        }
-
 
         public void AddRegistration(RegistrationObject registration)
         {
@@ -35,14 +25,42 @@ namespace LRV.Regatta.Buero.Services
             this.databaseContext.SaveChanges();
         }
 
-        public IList<FinishObject> GetAll()
+        public List<RegistrationObject> GetRegistrations()
+        {
+            return this.databaseContext.RegistrationObjects.ToList();
+        }
+
+        public void DeleteRegistration(RegistrationObject registration)
+        {
+            this.databaseContext.Remove(registration);
+            this.databaseContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="object"></param>
+        public void AddFinishObject(FinishObject @object)
+        {
+            this.databaseContext.FinishObjects.Add(@object);
+            this.databaseContext.SaveChanges();
+        }
+
+        public IList<FinishObject> GetAllFinishObject()
         {
             return this.databaseContext.FinishObjects.ToList();
         }
 
-        public List<RegistrationObject> GetRegistrations()
+        public void DeleteAllFinishObject()
         {
-            return this.databaseContext.RegistrationObjects.ToList();
+            this.databaseContext.FinishObjects.RemoveRange(this.databaseContext.FinishObjects);
+            this.databaseContext.SaveChanges();
+        }
+
+        public void DeleteFinishObject(FinishObject @object)
+        {
+            this.databaseContext.FinishObjects.Remove(@object);
+            this.databaseContext.SaveChanges();
         }
     }
 }

@@ -4,7 +4,9 @@ namespace LRV.Regatta.Buero.Services
 {
     public interface IFinishService
     {
-        void Add(FinishObject @object);
-        IList<FinishObject> GetAll();
+        void AddFinishObject(FinishObject @object);
+        void DeleteAllFinishObject();
+        void DeleteFinishObject(FinishObject item);
+        IList<FinishObject> GetAllFinishObject();
     }
 }
