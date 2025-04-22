@@ -3,7 +3,7 @@
 
 # Diese Stufe wird verwendet, wenn sie von VS im Schnellmodus ausgeführt wird (Standardeinstellung für Debugkonfiguration).
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+#USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 
@@ -23,6 +23,8 @@ RUN dotnet publish "./LRV.Regatta.Buero/LRV.Regatta.Buero.csproj" -c $BUILD_CONF
 
 # Diese Stufe wird in der Produktion oder bei Ausführung von VS im regulären Modus verwendet (Standard, wenn die Debugkonfiguration nicht verwendet wird).
 FROM base AS final
+#RUN useradd -ms /bin/bash regatta
+#USER regatta
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LRV.Regatta.Buero.dll"]
