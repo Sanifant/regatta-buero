@@ -51,7 +51,7 @@ namespace LRV.Regatta.Buero
                 .EnableDetailedErrors()
             );
 
-            builder.Services.AddScoped<IFinishService, MemoryFinishService>();
+            builder.Services.AddScoped<IFinishService, MysqlDataService>();
             builder.Services.AddScoped<IRegistrationService, MysqlDataService>();
 
             builder.Services.AddControllers();
