@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {Finish} from "../models/finish.model";
 
-export interface finishObject {
-  name: string;
-  path: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +13,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getData(): Observable<finishObject[]> {
+  getData(): Observable<Finish[]> {
     const headers = new HttpHeaders({
-      'apikey': `${this.apiKey}`
+      'X-API-KEY': `${this.apiKey}`
     });
-    return this.http.get<finishObject[]>(this.apiUrl, { headers });
+    return this.http.get<Finish[]>(this.apiUrl, { headers });
   }
 }

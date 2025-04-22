@@ -1,1 +1,7 @@
 <p>finish-photo works!</p>
+
+<div *ngFor="let item of data">
+  <img ngSrc='{{ "https://buero.luebeckregatta.de/images/" + item.firstPath }}' alt='{{ "picture " + item.firstPath }}' width="600" height="300">
+  <img ngSrc='{{ "https://buero.luebeckregatta.de/images/" + item.secondPath }}' alt='{{ "picture " + item.secondPath }}' width="600" height="300">
+  <p>{{ item.name }}</p>
+</div>

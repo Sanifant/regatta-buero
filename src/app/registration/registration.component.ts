@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Registration, RegistrationType } from '../models/registration.model';
 import { RegistrationService } from '../services/registration.service';
-import { HttpClient } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -18,36 +19,87 @@ import { Subject } from 'rxjs';
 })
 
 export class RegistrationComponent {
-  
+
+  form: FormGroup;
   registrationTypes = Object.values(RegistrationType);
-  newRegistration: Registration = new Registration();
-  searchTerm = '';
-  results: any[] = [];
-  private searchSubject = new Subject<string>();
+  teamSuggestions: string[] = [];
 
+  registrationTypeLabels: { [key in RegistrationType]: string } = {
+    [RegistrationType.Registration]: 'Normale Meldung',
+    [RegistrationType.LateRegistration]: 'Nachmeldung',
+    [RegistrationType.Reregistration]: 'Ummeldung'
+  };
 
-  constructor() {
-    this.searchSubject.pipe(
-      filter(term => term.length >= 3),
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(term => RegistrationService.searchTrainer(term))
-    ).subscribe(data => this.results = data);
+  constructor(private fb: FormBuilder,
+              private dataService: RegistrationService,
+              private snackBar: MatSnackBar) {
+    this.form = this.fb.group({
+      type: [RegistrationType.Registration, Validators.required],
+      race: ['', Validators.required],
+      startNo: ['', Validators.required],
+      team: ['', Validators.required],
+      chairMan: ['', Validators.required],
+      position1: [''],
+      position2: [''],
+      position3: [''],
+      position4: [''],
+      position5: [''],
+      position6: [''],
+      position7: [''],
+      position8: [''],
+      positionCox: ['']
+    });
 
+    this.form.get('team')?.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(query => query.length >= 3 ? this.dataService.searchTeams(query) : [])
+      )
+      .subscribe(results => {
+        this.teamSuggestions = results.map(r => r.name);
+      });
   }
 
-  onSearchChange(term: string) {
-    this.searchSubject.next(term);
+
+  submit() {
+    if (this.form.valid) {
+      const registration = this.form.value;
+      console.log('Registration ready to submit:', registration);
+      // Hier könntest du es z.B. an einen Service übergeben oder absenden
+    }
   }
 
-  onSubmit() {
+  selectTeam(name: string) {
+    this.form.get('team')?.setValue(name);
+    this.teamSuggestions = [];
   }
 
-  onReset() {
-    this.newRegistration = new Registration();
+  resetForm() {
+    this.form.reset({
+      type: RegistrationType.Registration,
+      race: '',
+      startNo: '',
+      team: '',
+      chairMan: '',
+      position1: '',
+      position2: '',
+      position3: '',
+      position4: '',
+      position5: '',
+      position6: '',
+      position7: '',
+      position8: '',
+      positionCox: ''
+    });
+    this.teamSuggestions = [];
+
+    this.snackBar.open('Formular wurde zurückgesetzt ✅', 'OK', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
   }
 
-  get jsonData() {
-    return JSON.stringify(this.newRegistration, null, 2);
-  }
+
 }
