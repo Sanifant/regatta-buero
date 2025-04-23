@@ -12,7 +12,7 @@
 
         public DateTime CreatedDate { get; set; }
 
-        public string Message { get; set; }
+        public string Message { get; set; } = "dummy";
 
         public string? Exception { get; set; }
     }

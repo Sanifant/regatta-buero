@@ -27,6 +27,11 @@
             {
                 log.ClientIp = String.IsNullOrEmpty(ip) ? ip : "unknown";
                 log.CreatedDate = DateTime.UtcNow;
+                log.ClientName = Request.Headers["X-Client-Name"].FirstOrDefault() ?? log.ClientName;
+                log.ClientVersion = Request.Headers["X-Client-Version"].FirstOrDefault() ?? log.ClientVersion;
+                log.Message = log.Message ?? "dummy";
+                log.Exception = log.Exception ?? null;
+
                 logService.AddLog(log);
             }
 
