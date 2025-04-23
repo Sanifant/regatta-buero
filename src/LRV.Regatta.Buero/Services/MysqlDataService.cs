@@ -5,7 +5,7 @@ namespace LRV.Regatta.Buero.Services
     /// <summary>
     /// 
     /// </summary>
-    public class MysqlDataService : IRegistrationService, IFinishService
+    public class MysqlDataService : IRegistrationService, IFinishService, ILogService
     {
         private readonly DatabaseContext databaseContext;
 
@@ -61,6 +61,17 @@ namespace LRV.Regatta.Buero.Services
         {
             this.databaseContext.FinishObjects.Remove(@object);
             this.databaseContext.SaveChanges();
+        }
+
+        public void AddLog(LogObject log)
+        {
+            this.databaseContext.LogObjects.Add(log);
+            this.databaseContext.SaveChanges();
+        }
+
+        public List<LogObject> GetLogs()
+        {
+            return this.databaseContext.LogObjects.ToList();
         }
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LRV.Regatta.Buero
 {
@@ -47,14 +49,18 @@ namespace LRV.Regatta.Buero
                     serverVersion
                 )
                 .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
             );
 
             builder.Services.AddScoped<IFinishService, MysqlDataService>();
             builder.Services.AddScoped<IRegistrationService, MysqlDataService>();
+            builder.Services.AddScoped<ILogService, MysqlDataService>();
 
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -96,6 +102,30 @@ namespace LRV.Regatta.Buero
 
                 c.AddSecurityRequirement(securityRequirement);
             });
+
+            
+            /*
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<DatabaseContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = "your-app",
+                    ValidAudience = "your-app",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+                };
+            });
+            */
 
             var app = builder.Build();
 

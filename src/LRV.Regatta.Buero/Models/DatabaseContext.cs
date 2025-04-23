@@ -13,5 +13,7 @@ namespace LRV.Regatta.Buero.Models
         public DbSet<RegistrationObject> RegistrationObjects { get; set; }
 
         public DbSet<TeamObject> TeamObjects { get; set; }
+
+        public DbSet<LogObject> LogObjects { get; set; }
     }
 }
