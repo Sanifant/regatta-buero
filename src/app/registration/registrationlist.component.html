@@ -1,0 +1,45 @@
+<div *ngIf="isLoading">Lade Meldungen...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<table *ngIf="!isLoading && registrations.length > 0" class="registration-table">
+  <thead>
+    <tr>
+      <th>type</th>
+      <th>race</th>
+      <th>startNo</th>
+      <th>team</th>
+      <th>chairMan</th>
+      <th>position1</th>
+      <th>position2</th>
+      <th>position3</th>
+      <th>position4</th>
+      <th>position5</th>
+      <th>position6</th>
+      <th>position7</th>
+      <th>position8</th>
+      <th>positionCox</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reg of registrations">
+      <td>{{ reg.type }}</td>
+      <td>{{ reg.race }}</td>
+      <td>{{ reg.startNo }}</td>
+      <td>{{ reg.team }}</td>
+      <td>{{ reg.chairMan }}</td>
+      <td>{{ reg.position1 }}</td>
+      <td>{{ reg.position2 }}</td>
+      <td>{{ reg.position3 }}</td>
+      <td>{{ reg.position4 }}</td>
+      <td>{{ reg.position5 }}</td>
+      <td>{{ reg.position6 }}</td>
+      <td>{{ reg.position7 }}</td>
+      <td>{{ reg.position8 }}</td>
+      <td>{{ reg.positionCox }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!isLoading && registrations.length === 0">
+  Keine Meldungen gefunden.
+</div>

@@ -11,3 +11,17 @@ div.form-group button {
   padding-right: 50px;
   text-align: center;
 }
+
+.registration-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.registration-table th, .registration-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.error {
+  color: red;
+}

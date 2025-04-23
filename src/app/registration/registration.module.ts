@@ -5,10 +5,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { UploadComponent } from './upload.component';
 import { RegistrationComponent } from "./registration.component";
+import {RegistrationListComponent} from "./registrationlist.component";
 
 const routes: Routes = [
-  { path: '', component: RegistrationComponent },
-  { path: 'upload', component: UploadComponent }
+  { path: '',
+    component: RegistrationComponent},
+  { path: 'upload',
+    component: UploadComponent },
+  { path: 'list',
+    component: RegistrationListComponent }
 ];
 
 @NgModule({

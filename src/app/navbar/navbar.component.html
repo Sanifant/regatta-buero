@@ -1,0 +1,96 @@
+<nav>
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <img src="assets/lrvLogo.png" width="100" />
+      <span class="fs-4">Regatta B&uuml;ro</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link link-dark"  href="/dashboard">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#home"/>
+          </svg>
+          Dashboard
+        </a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link link-dark" href="/finish">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#camera"/>
+          </svg>
+          Ziel Fotos
+        </a>
+      </li>
+      <li>
+        <a class="nav-link link-dark" href="/registration">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#chat-quote-fill"/>
+          </svg>
+          Meldungen abgeben
+        </a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link link-dark" href="/registration/list">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#collection"/>
+          </svg>
+          Meldungen
+        </a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link link-dark" href="/registration/upload">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#tools"/>
+          </svg>
+          Team hochladen
+        </a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-link link-dark" href="/logfiles">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#people-circle"/>
+          </svg>
+          Logfiles
+        </a>
+      </li>
+      <li>
+        <a class="nav-link link-dark" href="/about">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#people-circle"/>
+          </svg>
+          About
+        </a>
+      </li>
+      <li *ngIf="hasRole('User')"><a routerLink="/user">User Bereich</a></li>
+      <li *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
+    </ul>
+
+    <hr>
+    <div *ngIf="!isLoggedIn">
+      <a routerLink="/login">
+        <svg class="bi me-2" width="16" height="16">
+          <use xlink:href="#people-circle"/>
+        </svg>
+        <strong>Anmelden</strong>
+      </a>
+    </div>
+    <div class="dropdown" *ngIf="isLoggedIn">
+      <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+        <svg class="bi me-2" width="16" height="16">
+          <use xlink:href="#people-circle"/>
+        </svg>
+        <strong>mdo</strong>
+      </a>
+      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-item">
+          <a (click)="logout()">Abmelden</a>
+        </li>
+      </ul>
+    </div>
+    <hr>
+    <div class="container">
+      <span class="text-body-secondary">L&uuml;becker Regattaverein 2025</span>
+    </div>
+</nav>

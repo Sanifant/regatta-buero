@@ -1,0 +1,31 @@
+<div *ngIf="isLoading">Lade Meldungen...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<table *ngIf="!isLoading && logs.length > 0" class="registration-table">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Client IP</th>
+    <th>Client Name</th>
+    <th>Version</th>
+    <th>Empfangen am</th>
+    <th>Nachricht</th>
+    <th>Fehler</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let log of logs">
+    <td>{{ log.Id }}</td>
+    <td>{{ log.ClientIp }}</td>
+    <td>{{ log.ClientName }}</td>
+    <td>{{ log.ClientVersion }}</td>
+    <td>{{ log.CreatedDate }}</td>
+    <td>{{ log.Message }}</td>
+    <td>{{ log.Exception }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!isLoading && logs.length === 0">
+  Keine Meldungen gefunden.
+</div>

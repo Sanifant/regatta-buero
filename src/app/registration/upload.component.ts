@@ -4,6 +4,8 @@ import {RegistrationService} from "../services/registration.service";
 
 @Component({
   selector: 'app-upload',
+  standalone: true,
+  styleUrl: './registration.component.css',
   templateUrl: './upload.component.html',
   imports: [
     NgIf,

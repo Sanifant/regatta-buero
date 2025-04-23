@@ -66,7 +66,19 @@ export class RegistrationComponent {
     if (this.form.valid) {
       const registration = this.form.value;
       console.log('Registration ready to submit:', registration);
-      // Hier könntest du es z.B. an einen Service übergeben oder absenden
+      this.dataService.addRegistration(registration).subscribe({
+        next: res => {
+          this.snackBar.open('Meldung wurde eingereicht ✅', 'OK', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top'
+            });
+            },
+        error: err => {
+          alert('Fehler beim Upload: ' + err.error)
+          console.error(err.error);
+        }
+      });
     }
   }
 
