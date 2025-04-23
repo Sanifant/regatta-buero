@@ -1,9 +1,11 @@
 ﻿namespace LRV.Regatta.Buero.Controllers
 {
+    using LRV.Regatta.Buero.Attributes;
     using LRV.Regatta.Buero.Models;
     using LRV.Regatta.Buero.Services;
     using Microsoft.AspNetCore.Mvc;
 
+    [ApiKey]
     [ApiController]
     [Route("api/[controller]")]
     public class LogController : ControllerBase
