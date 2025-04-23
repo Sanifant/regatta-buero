@@ -23,11 +23,9 @@
             var ip = Request.Headers["X-Forwarded-For"].FirstOrDefault()
                 ?? HttpContext.Connection.RemoteIpAddress?.ToString();
 
-            var clientIp = ip ?? "unknown";
-
             foreach (var log in logs)
             {
-                log.ClientIp = clientIp;
+                log.ClientIp = String.IsNullOrEmpty(ip) ? ip : "unknown";
                 log.CreatedDate = DateTime.UtcNow;
                 logService.AddLog(log);
             }

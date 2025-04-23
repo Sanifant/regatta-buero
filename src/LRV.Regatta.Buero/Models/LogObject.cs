@@ -4,7 +4,11 @@
     {
         public int Id { get; set; }
 
-        public string ClientIp { get; set; }
+        public string ClientIp { get; set; } = string.Empty;
+
+        public string ClientName { get; set; } = string.Empty;
+
+        public string ClientVersion { get; set; } = string.Empty;
 
         public DateTime CreatedDate { get; set; }
 
