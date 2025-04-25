@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
+import {UserObject} from "../models/user.model";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
+  currentUser: UserObject | undefined;
+
   getRoles(): string[] {
     const token = localStorage.getItem('token');
     if (!token) return [];
@@ -12,6 +16,10 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return true; //!!localStorage.getItem('token');
+    return !!localStorage.getItem('token');
+  }
+
+  setUser(userModel: UserObject) {
+    this.currentUser = userModel;
   }
 }

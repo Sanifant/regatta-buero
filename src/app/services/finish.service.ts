@@ -19,4 +19,12 @@ export class ApiService {
     });
     return this.http.get<Finish[]>(this.apiUrl, { headers });
   }
+
+  deleteData() : Observable<Object> {
+    const headers = new HttpHeaders({
+      'X-API-KEY': `${this.apiKey}`
+    });
+    return this.http.delete(this.apiUrl, { headers });
+
+  }
 }

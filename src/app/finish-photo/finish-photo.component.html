@@ -1,8 +1,15 @@
-<p>Zieleinlauf</p>
-<div class="scrollbox">
+
+<div *ngIf="isLoading">Lade Ziel Fotos...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div  *ngIf="!isLoading && data.length > 0" class="scrollbox" style="overflow-y: scroll; height: 800px;">
   <div *ngFor="let item of data">
     <img ngSrc='{{ "https://buero.luebeckregatta.de/images/" + item.firstPath }}' alt='{{ "picture " + item.firstPath }}' width="600" height="300">
     <img ngSrc='{{ "https://buero.luebeckregatta.de/images/" + item.secondPath }}' alt='{{ "picture " + item.secondPath }}' width="600" height="300">
     <p>{{ item.name }}</p>
   </div>
+</div>
+
+<div *ngIf="!isLoading && data.length === 0">
+  Keine Ziel Fotos gefunden... ¯\_(ツ)_/¯
 </div>

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from "../services/finish.service";
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {Finish} from "../models/finish.model";
 
 @Component({
@@ -8,14 +8,17 @@ import {Finish} from "../models/finish.model";
   standalone: true,
   imports: [
     NgForOf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    NgIf
   ],
   templateUrl: './finish-photo.component.html',
   styleUrl: './finish-photo.component.css'
 })
 export class FinishPhotoComponent implements OnInit {
 
-  data: Finish[] | undefined;
+  data: Finish[] = [];
+  isLoading = true;
+  error?: string;
 
   constructor(private finishService: ApiService) {
   }
@@ -25,8 +28,14 @@ export class FinishPhotoComponent implements OnInit {
     setInterval(() => {
       console.log("refreshing data");
       this.finishService.getData().subscribe({
-        next: response => (this.data = response),
-        error: err => console.log(err)
+        next: response => {
+          this.data = response;
+          this.isLoading = false;
+        },
+        error: err => {
+          console.log(err);
+          this.error = 'Fehler beim Laden der Daten: ' + err;
+        }
     })
     }, 5000);
   }

@@ -10,19 +10,19 @@
     <th>Version</th>
     <th>Empfangen am</th>
     <th>Nachricht</th>
-    <th>Fehler</th>
+    <th>Fehlermeldung</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let log of logs">
-    <td>{{ log.Id }}</td>
-    <td>{{ log.ClientIp }}</td>
-    <td>{{ log.ClientName }}</td>
-    <td>{{ log.ClientVersion }}</td>
-    <td>{{ log.CreatedDate }}</td>
-    <td>{{ log.Message }}</td>
-    <td>{{ log.Exception }}</td>
-  </tr>
+    <tr *ngFor="let log of logs">
+      <td>{{ log.Id }}</td>
+      <td>{{ log.ClientIp }}</td>
+      <td>{{ log.ClientName }}</td>
+      <td>{{ log.ClientVersion }}</td>
+      <td>{{ log.CreatedDate }}</td>
+      <td>{{ log.Message }}</td>
+      <td>{{ log.Exception }}</td>
+    </tr>
   </tbody>
 </table>
 

@@ -1,5 +1,5 @@
-<form (ngSubmit)="login()">
+<form>
   <input type="text" [(ngModel)]="model.username" name="username" placeholder="Benutzername" required />
   <input type="password" [(ngModel)]="model.password" name="password" placeholder="Passwort" required />
-  <button type="submit">Anmelden</button>
+  <button (click)="login()">Anmelden</button>
 </form>

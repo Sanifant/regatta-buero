@@ -15,24 +15,24 @@ export class RegistrationService {
   constructor(private http: HttpClient) {
   }
 
-  uploadFile(teamContent :string) {
-    if (teamContent) return;
+  uploadFile(teamContent :string): Observable<string> {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/xml',
       'X-API-KEY': `${this.apiKey}`
     });
 
-    this.http.post(this.apiUrl + '/Team', teamContent, { headers, responseType: 'text' })
-      .subscribe({
-        next: res => alert('Upload erfolgreich!'),
-        error: err => alert('Fehler beim Upload: ' + err.error)
-      });
+    return this.http.post(this.apiUrl + '/Team', teamContent, { headers, responseType: 'text' });
   }
 
   searchTeams(query: string): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'X-API-KEY': `${this.apiKey}`
+    });
+
     const params = new HttpParams().set('teamName', query);
-    return this.http.get<any[]>(`${this.apiUrl}/Team/select`, { params });
+
+    return this.http.get<any[]>(`${this.apiUrl}/Team/select`, { params, headers });
   }
 
   loadTeams(): Observable<LogObject[]> {
@@ -41,6 +41,14 @@ export class RegistrationService {
       'X-API-KEY': `${this.apiKey}`
     });
     return this.http.get<any[]>(this.apiUrl + '/Team', { headers})
+  }
+
+  deleteTeams(): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'X-API-KEY': `${this.apiKey}`
+    });
+    return this.http.delete(this.apiUrl + '/Team', { headers})
   }
 
   loadRegistration(): Observable<Registration[]> {

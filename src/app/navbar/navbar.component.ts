@@ -1,6 +1,6 @@
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {NgIf} from "@angular/common";
 
 @Component({
@@ -13,7 +13,7 @@ import {NgIf} from "@angular/common";
   styleUrl: './navbar.component.css'
 })
 
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   roles: string[] = [];
   isLoggedIn: boolean = false;
   userName: string = "";
@@ -21,7 +21,7 @@ export class NavbarComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.roles = this.authService.getRoles();
+    //this.roles = this.authService.getRoles();
     this.isLoggedIn = this.authService.isLoggedIn();
 
   }
