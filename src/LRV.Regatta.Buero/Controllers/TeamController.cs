@@ -6,9 +6,11 @@ using System.Xml.Serialization;
 using System;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using LRV.Regatta.Buero.Attributes;
 
 namespace LRV.Regatta.Buero.Controllers
 {
+    [ApiKey]
     [Route("api/[controller]")]
     [ApiController]
     public class TeamController : ControllerBase
@@ -75,6 +77,14 @@ namespace LRV.Regatta.Buero.Controllers
                 .ToListAsync();
 
             return Ok(results);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAllTeams()
+        {
+            this.dbContext.TeamObjects.ExecuteDelete();
+            this.dbContext.SaveChanges();
+            return Ok();
         }
     }
 }

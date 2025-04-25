@@ -8,6 +8,9 @@ using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LRV.Regatta.Buero
 {
@@ -103,29 +106,27 @@ namespace LRV.Regatta.Buero
                 c.AddSecurityRequirement(securityRequirement);
             });
 
-            
-            /*
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<DatabaseContext>()
-                .AddDefaultTokenProviders();
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+            var secretKey = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key"));
 
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
+            }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = "your-app",
-                    ValidAudience = "your-app",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.GetValue<string>("Issuer"),
+                    ValidAudience = jwtSettings.GetValue<string>("Audience"),
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                 };
             });
-            */
 
             var app = builder.Build();
 
@@ -138,6 +139,7 @@ namespace LRV.Regatta.Buero
 
             app.UseCors("origin");
 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 
