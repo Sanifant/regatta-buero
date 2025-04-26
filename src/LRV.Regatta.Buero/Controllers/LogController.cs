@@ -52,6 +52,7 @@
             if (pageSize < 1) pageSize = 10;
 
             var result = logService.GetPaginatedLogs(page, pageSize);
+
             return Ok(result);
         }
     }
