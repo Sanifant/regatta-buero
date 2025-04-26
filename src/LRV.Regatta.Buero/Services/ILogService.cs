@@ -6,5 +6,6 @@ namespace LRV.Regatta.Buero.Services
     {
         void AddLog(LogObject log);
         List<LogObject> GetLogs();
+        PagedResult<LogObject> GetPaginatedLogs(int page, int pageSize);
     }
 }

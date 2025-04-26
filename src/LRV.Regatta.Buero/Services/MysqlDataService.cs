@@ -1,4 +1,6 @@
 ﻿using LRV.Regatta.Buero.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace LRV.Regatta.Buero.Services
 {
@@ -72,6 +74,26 @@ namespace LRV.Regatta.Buero.Services
         public List<LogObject> GetLogs()
         {
             return this.databaseContext.LogObjects.ToList();
+        }
+
+
+        public PagedResult<LogObject> GetPaginatedLogs(int page, int pageSize)
+        {
+            var query = this.databaseContext.LogObjects.AsQueryable();
+
+            var totalCount = query.Count();
+            var items = query
+                .OrderBy(i => i.Id) // oder ein anderes Feld
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PagedResult<LogObject>()
+            {
+                Items = items,
+                TotalCount = totalCount
+            };
+
         }
     }
 }

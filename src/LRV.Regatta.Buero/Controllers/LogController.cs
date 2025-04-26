@@ -4,6 +4,7 @@
     using LRV.Regatta.Buero.Models;
     using LRV.Regatta.Buero.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     [ApiKey]
     [ApiController]
@@ -42,6 +43,16 @@
         public IActionResult Get()
         {
             return Ok(logService.GetLogs());
+        }
+
+        [HttpGet]
+        public ActionResult<PagedResult<LogObject>> GetItems(int page = 1, int pageSize = 10)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var result = logService.GetPaginatedLogs(page, pageSize);
+            return Ok(result);
         }
     }
 
