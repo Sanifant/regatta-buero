@@ -50,7 +50,7 @@ namespace LRV.Regatta.Buero.Services
 
         public IList<FinishObject> GetAllFinishObject()
         {
-            return this.databaseContext.FinishObjects.ToList();
+            return this.databaseContext.FinishObjects.OrderByDescending(r => r.Id).ToList();
         }
 
         public void DeleteAllFinishObject()
