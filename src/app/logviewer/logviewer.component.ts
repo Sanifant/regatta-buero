@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {LoggingService} from "../services/logging.service";
 import {LogObject} from "../models/log.model";
+import {PagedResult} from "../models/pagedResult.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-logviewer',
@@ -13,31 +15,35 @@ import {LogObject} from "../models/log.model";
   styleUrl: './logviewer.component.css'
 })
 export class LogviewerComponent implements OnInit{
-  logs: LogObject[] = [];
+  logs: LogObject[]= [];
   isLoading = true;
   error?: string;
-  private loggingService: any;
+  currentPage = 1;
+  pageSize = 10;
+  totalItems = 0;
 
-  constructor(logingService: LoggingService) {
-    this.loggingService = logingService;
+  constructor(private loggingService: LoggingService) {
   }
 
-  ngOnInit(): void {
-    this.loadLogs();
+  ngOnInit() {
+    this.loadData(this.currentPage);
   }
 
-  loadLogs() {
-
-    this.loggingService.loadLogs().subscribe({
-      next: (data: LogObject[] ) => {
-        this.logs = data;
+  loadData(page: number) {
+    this.loggingService.searchLogs(page, this.pageSize).subscribe({
+      next: value => {
+        this.logs = value.items;
+        this.totalItems = value.totalCount;
+        this.currentPage = page;
         this.isLoading = false;
       },
-      error: (err: any) => {
-        this.error = 'Fehler beim Laden der Daten.';
-        console.error(err);
-        this.isLoading = false;
+      error: err => {
+        this.error = `Fehler beim Laden der Daten. ${err.message}`;
       }
-    })
+    });
+  }
+
+  onPageChange(page: number) {
+    this.loadData(page);
   }
 }
