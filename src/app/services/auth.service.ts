@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import {UserObject} from "../models/user.model";
+import {ReplaySubject} from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  currentUser: UserObject | undefined;
+  private currentUserSource = new ReplaySubject<UserObject | undefined>(1);
+  public currentUser$ = this.currentUserSource.asObservable();
+
 
   getRoles(): string[] {
     const token = localStorage.getItem('token');
@@ -16,10 +19,17 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    const token = !!localStorage.getItem('token');
+    if (token) {
+      this.setUser(new UserObject());
+    }
+    return token;
   }
 
-  setUser(userModel: UserObject) {
-    this.currentUser = userModel;
+  setUser(userModel: UserObject | undefined) {
+    if (!userModel) {
+      localStorage.removeItem('token');
+    }
+    this.currentUserSource.next(userModel);
   }
 }

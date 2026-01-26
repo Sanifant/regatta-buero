@@ -10,6 +10,6 @@ import {NavbarComponent} from "./navbar/navbar.component";
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Lübeck Regatta 2025';
+  title = 'Lübeck Regatta 2026';
 
 }
