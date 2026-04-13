@@ -3,18 +3,15 @@ using LRV.Regatta.Buero.Services;
 using LRV.Regatta.Buero.Models;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.DependencyInjection;
+using LRV.Regatta.Buero.Interfaces;
 
 namespace LRV.Regatta.Buero
 {
@@ -83,13 +80,12 @@ namespace LRV.Regatta.Buero
                 c.IgnoreObsoleteActions();
                 c.IncludeXmlComments(Assembly.GetExecutingAssembly());
 
-                // Füge die API Key-Definition hinzu
                 c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Name = "X-API-KEY",
                     Type = SecuritySchemeType.ApiKey,
-                    Description = "Fügen Sie hier den API Key ein"
+                    Description = "Insert Api-Key here"
                 });
 
                 var securityRequirement = new OpenApiSecurityRequirement
@@ -134,7 +130,7 @@ namespace LRV.Regatta.Buero
 
             builder.Services.AddHealthChecks()
                 .AddRedis(
-                    redisConnectionString: builder.Configuration.GetConnectionString("Redis"),
+                    redisConnectionString: $"{builder.Configuration["REDIS_HOST"]}:{builder.Configuration["REDIS_PORT"]}",
                     name: "redis",
                     failureStatus: HealthStatus.Unhealthy,
                     tags: new[] { "ready" })

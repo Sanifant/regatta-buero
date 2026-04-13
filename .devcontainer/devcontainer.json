@@ -1,60 +1,48 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
 {
-    "name": "C# (.NET) and PostgreSQL",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
+	"name": "C# (.NET) and PostgreSQL",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
-		"ghcr.io/devcontainers/features/dotnet:2": {
-			"version": "lts"
-		},
-        "ghcr.io/devcontainers/features/common-utils:2": {},
-		"ghcr.io/warrenbuckley/codespace-features/smtp4dev:1": {
-			"autorun": true,
-			"webport": "5000",
-			"smtpport": "25",
-			"imapport": "143"
-		}
 	},
-			"settings": {
-				"editor.tabSize": 4,
-				"files.exclude": {
-					"**/bin": true,
-					"**/obj": true
-				},
-				"mysql-shell.defaultConnectionSettings": {
-					"host": "db",
-					"port": 3306,
-					"user": "app_user",
-					"password": "app_password",
-					"database": "app"
-				}
-			},
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"streetsidesoftware.code-spell-checker",
 				"davidanson.vscode-markdownlint",
-                "GitHub.vscode-github-actions",
-                "ms-dotnettools.csdevkit",
+				"GitHub.vscode-github-actions",
+				"ms-dotnettools.csdevkit",
 				"Redis.redis-for-vscode",
-				"Oracle.mysql-shell-for-vs-code"
+				"Oracle.mysql-shell-for-vs-code",
+				"streetsidesoftware.code-spell-checker-german"
 			]
+		},
+		"settings": {
+			"editor.tabSize": 4,
+			"files.exclude": {
+				"**/bin": true,
+				"**/obj": true
+			},
+			"mysql-shell.defaultConnectionSettings": {
+				"host": "db",
+				"port": 3306,
+				"user": "app_user",
+				"password": "app_password",
+				"database": "app"
+			}
 		}
 	},
 	"forwardPorts": [
-		5000, 
-		5015],
-    "portsAttributes": {
-        "5000": {
-            "label": "Mail Stub",
-            "onAutoForward": "notify"
-        },
-        "5015": {
-            "label": "Regatta Backend",
-            "onAutoForward": "notify"
-        }
-    },
+		5000,
+		5015
+	],
+	"portsAttributes": {
+		"5015": {
+			"label": "Regatta Backend",
+			"onAutoForward": "notify"
+		}
+	},
 	"postCreateCommand": "dotnet restore"
 }

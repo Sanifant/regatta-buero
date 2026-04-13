@@ -1,6 +1,5 @@
 ﻿using LRV.Regatta.Buero.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using LRV.Regatta.Buero.Interfaces;
 
 namespace LRV.Regatta.Buero.Services
 {
@@ -83,7 +82,7 @@ namespace LRV.Regatta.Buero.Services
 
             var totalCount = query.Count();
             var items = query
-                .OrderBy(i => i.Id) // oder ein anderes Feld
+                .OrderBy(i => i.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

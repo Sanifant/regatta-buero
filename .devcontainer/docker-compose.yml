@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     volumes:
       - ../..:/workspaces:cached
     environment: 
@@ -15,6 +14,13 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      X-API-KEY: ${API_KEY}
+      JWT_KEY: ${JWT_KEY}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
+      JWT_EXPIRES_MINUTES: ${JWT_EXPIRES_MINUTES}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
     command: sleep infinity
     network_mode: service:db
 
@@ -35,7 +41,8 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   redis:
-    image: redis
+    container_name: ${REDIS_HOST}
+    image: redis:latest
     restart: unless-stopped
 
 volumes:

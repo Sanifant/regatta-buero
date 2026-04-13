@@ -1,57 +1,33 @@
 ﻿using LRV.Regatta.Buero.Models;
-using LRV.Regatta.Buero.Interfaces;
 
-namespace LRV.Regatta.Buero.Services
+namespace LRV.Regatta.Buero.Interfaces
 {
     /// <summary>
-    /// MemoryFinishService class that implements the IFinishService interface, providing an in-memory implementation
-    /// for managing FinishObject instances. This service allows for adding, deleting, and retrieving FinishObject instances without the need for a persistent database, making it suitable for testing and development purposes.
+    /// IFinishService interface that defines the contract for managing FinishObject instances. This interface includes methods for adding, deleting, and retrieving finish line data, allowing for the implementation of various data storage solutions (e.g., in-memory, database) while maintaining a consistent API for handling finish line information in the context of a regatta management system.
     /// </summary>
-    public class MemoryFinishService : IFinishService
+    public interface IFinishService
     {
-        private List<FinishObject> _finishObjects;
-
-        /// <summary>
-        ///     Constructor for the MemoryFinishService class, initializing the internal list of FinishObject instances. This constructor sets up an empty list to store FinishObject instances in memory, allowing for operations such as adding, deleting, and retrieving finish line data without relying on a database.
-        /// </summary>
-        public MemoryFinishService()
-        {
-            _finishObjects = new List<FinishObject>();
-        }
-
         /// <summary>
         /// Adds a FinishObject instance to the internal list of finish objects. This method allows for adding new finish line data to the in-memory collection, enabling the management of finish line information without the need for a persistent database.
         /// </summary>
         /// <param name="object">The FinishObject instance to be added to the in-memory collection.</param>
-        public void AddFinishObject(FinishObject @object)
-        {
-            _finishObjects.Add(@object);
-        }
+        void AddFinishObject(FinishObject @object);
 
         /// <summary>
         /// Deletes all FinishObject instances from the internal list. This method clears the in-memory collection, effectively removing all finish line data without affecting a persistent database.
         /// </summary>
-        public void DeleteAllFinishObject()
-        {
-            _finishObjects.Clear();
-        }
+        void DeleteAllFinishObject();
 
         /// <summary>
         /// Deletes a specific FinishObject instance from the internal list. This method removes the specified finish line data from the in-memory collection without affecting a persistent database.
         /// </summary>
         /// <param name="item">The FinishObject instance to be removed from the in-memory collection.</param>
-        public void DeleteFinishObject(FinishObject item)
-        {
-            _finishObjects.Remove(item);
-        }
+        void DeleteFinishObject(FinishObject item);
 
         /// <summary>
         /// Retrieves all FinishObject instances from the internal list. This method returns the in-memory collection of finish line data, allowing for read operations without accessing a persistent database.
         /// </summary>
         /// <returns>A list of all FinishObject instances in the in-memory collection.</returns>
-        public IList<FinishObject> GetAllFinishObject()
-        {
-            return _finishObjects;
-        }
+        IList<FinishObject> GetAllFinishObject();
     }
 }
