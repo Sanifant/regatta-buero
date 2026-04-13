@@ -52,12 +52,12 @@ namespace LRV.Regatta.Buero
                     connectionString,
                     serverVersion
                 )
-                .LogTo(Console.WriteLine, LogLevel.Information)
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
             );
 
-            builder.Services.AddScoped<IFinishService, MysqlDataService>();
-            builder.Services.AddScoped<IRegistrationService, MysqlDataService>();
-            builder.Services.AddScoped<ILogService, MysqlDataService>();
+            builder.Services.AddScoped<IFinishService, FinishService>();
+            builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+            builder.Services.AddScoped<ILogService, LogService>();
 
             builder.Services
                 .AddControllers()
