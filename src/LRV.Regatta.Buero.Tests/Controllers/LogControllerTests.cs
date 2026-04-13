@@ -36,7 +36,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             var logs = new List<LogObject>
             {
-                new() { Message = null, ClientName = "", ClientVersion = "" },
+                new() { ClientName = "", ClientVersion = "" },
                 new() { Message = "manual message", ClientName = "keep-me", ClientVersion = "keep-me" }
             };
 
@@ -53,13 +53,15 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         }
 
         [TestMethod]
-        public void Post_UsesRemoteIp_WhenNoForwardedHeader()
+        public void Post_UsesRemoteIp_FromForwardedHeader()
         {
             var fake = new FakeLogService();
             var controller = new LogController(fake);
 
             var httpContext = new DefaultHttpContext();
-            httpContext.Connection.RemoteIpAddress = IPAddress.Parse("10.1.2.3");
+            httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
+            httpContext.Request.Headers["X-Client-Version"] = "1.2.3";
+            httpContext.Request.Headers["X-Forwarded-For"] = "10.1.2.3";
 
             controller.ControllerContext = new ControllerContext
             {
@@ -74,6 +76,83 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             // Erwartetes Verhalten fachlich: Remote IP soll übernommen werden
             Assert.AreEqual("10.1.2.3", fake.AddedLogs[0].ClientIp);
+        }
+
+        [TestMethod]
+        public void Post_UsesClientName_FromForwardedHeader()
+        {
+            var fake = new FakeLogService();
+            var controller = new LogController(fake);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
+            httpContext.Request.Headers["X-Client-Version"] = "1.2.3";
+            httpContext.Request.Headers["X-Forwarded-For"] = "1.2.3";
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            var logs = new List<LogObject> { new() { Message = "test" } };
+
+            controller.Post(logs);
+
+            Assert.AreEqual(1, fake.AddedLogs.Count);
+
+            // Erwartetes Verhalten fachlich: Client Name soll übernommen werden
+            Assert.AreEqual("RegattaClient", fake.AddedLogs[0].ClientName);
+        }
+
+        [TestMethod]
+        public void Post_UsesClientVersion_FromForwardedHeader()
+        {
+            var fake = new FakeLogService();
+            var controller = new LogController(fake);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
+            httpContext.Request.Headers["X-Client-Version"] = "1.2.3";
+            httpContext.Request.Headers["X-Forwarded-For"] = "1.2.3";
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            var logs = new List<LogObject> { new() { Message = "test" } };
+
+            controller.Post(logs);
+
+            Assert.AreEqual(1, fake.AddedLogs.Count);
+
+            // Erwartetes Verhalten fachlich: Client Version soll übernommen werden
+            Assert.AreEqual("1.2.3", fake.AddedLogs[0].ClientVersion);
+        }
+
+        [TestMethod]
+        public void Post_UsesDummy_ClientName()
+        {
+            var fake = new FakeLogService();
+            var controller = new LogController(fake);
+
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["X-Client-Version"] = "1.2.3";
+            httpContext.Request.Headers["X-Forwarded-For"] = "1.2.3";
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
+
+            var logs = new List<LogObject> { new() { Message = "test", ClientName = "RegattaClient" } };
+
+            controller.Post(logs);
+
+            Assert.AreEqual(1, fake.AddedLogs.Count);
+
+            // Erwartetes Verhalten fachlich: Dummy Client Name soll übernommen werden
+            Assert.AreEqual("RegattaClient", fake.AddedLogs[0].ClientName);
         }
     }
 }

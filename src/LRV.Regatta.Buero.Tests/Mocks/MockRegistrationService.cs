@@ -12,6 +12,16 @@ namespace LRV.Regatta.Buero.Tests.Mocks
             Registrations.Add(registration);
         }
 
+        public void DeleteRegistration(RegistrationObject registration)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RegistrationObject GetRegistration(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<RegistrationObject> GetRegistrations()
         {
             return Registrations;

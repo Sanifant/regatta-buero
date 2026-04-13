@@ -56,6 +56,18 @@ namespace LRV.Regatta.Buero.Services
         /// <param name="object">The finish object to delete.</param>
         public void DeleteFinishObject(FinishObject @object)
         {
+            if(@object == null)
+            {
+                this.logger.LogWarning("Attempted to delete a null finish object.");
+                return;
+            }
+
+            if(!this.databaseContext.FinishObjects.Any(o => o.Id == @object.Id))
+            {
+                this.logger.LogWarning("Attempted to delete a finish object that does not exist. ID: {Id}", @object.Id);
+                throw new KeyNotFoundException($"Finish object with ID {@object.Id} not found.");
+            }
+
             this.databaseContext.FinishObjects.Remove(@object);
             this.databaseContext.SaveChanges();
         }

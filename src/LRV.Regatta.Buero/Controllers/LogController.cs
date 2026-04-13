@@ -37,7 +37,7 @@
 
             foreach (var log in logs)
             {
-                log.ClientIp = string.IsNullOrEmpty(ip) ? ip : "unknown";
+                log.ClientIp = ip ?? "unknown";
                 log.CreatedDate = DateTime.UtcNow;
                 log.ClientName = Request.Headers["X-Client-Name"].FirstOrDefault() ?? log.ClientName;
                 log.ClientVersion = Request.Headers["X-Client-Version"].FirstOrDefault() ?? log.ClientVersion;

@@ -1,4 +1,7 @@
 # Custom Dictionary Words
+appsettings
 Buero
+dotnet
 folderpath
 Npgsql
+nullable
