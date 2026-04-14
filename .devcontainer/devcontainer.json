@@ -17,20 +17,20 @@
 				"Redis.redis-for-vscode",
 				"Oracle.mysql-shell-for-vs-code",
 				"streetsidesoftware.code-spell-checker-german"
-			]
-		},
-		"settings": {
-			"editor.tabSize": 4,
-			"files.exclude": {
-				"**/bin": true,
-				"**/obj": true
-			},
-			"mysql-shell.defaultConnectionSettings": {
-				"host": "db",
-				"port": 3306,
-				"user": "app_user",
-				"password": "app_password",
-				"database": "app"
+			],
+			"settings": {
+				"editor.tabSize": 4,
+				"files.exclude": {
+					"**/bin": true,
+					"**/obj": true
+				},
+				"mysql-shell.defaultConnectionSettings": {
+					"host": "db",
+					"port": 3306,
+					"user": "app_user",
+					"password": "app_password",
+					"database": "app"
+				}
 			}
 		}
 	},
