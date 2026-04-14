@@ -33,7 +33,8 @@ Das Projekt stellt REST-Endpunkte fuer Meldungen, Vereine, Zieleinlaeufe und Log
 ### 1. Infrastruktur starten
 
 ```bash
-docker compose -f tools/docker-compose.yml up -d
+cp tools/.env.example tools/.env
+docker compose --env-file tools/.env -f tools/docker-compose.yml up -d
 ```
 
 Verfuegbare Services:
