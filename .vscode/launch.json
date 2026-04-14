@@ -14,17 +14,6 @@
     ],
     "configurations": [
         {
-            "name": "Create Test Coverage Report",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build backend",
-            "program": "${workspaceFolder}/src/LRV.Regatta.Buero/bin/Debug/net8.0/LRV.Regatta.Buero.dll",
-            "args": ["--collect:\"XPlat Code Coverage\"",
-                "--results-directory", "${workspaceFolder}/coverage"],
-            "cwd": "${workspaceFolder}/src/LRV.Regatta.Buero",
-            "stopAtEntry": false   
-        },
-        {
             "name": "BackEnd",
             "type": "coreclr",
             "request": "launch",
