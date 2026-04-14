@@ -1,28 +1,32 @@
 using LRV.Regatta.Buero.Interfaces;
 using LRV.Regatta.Buero.Models;
+using LRV.Regatta.Buero.Tests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace LRV.Regatta.Buero.Controllers.Tests
 {
     [TestClass]
     public class LogControllerTests
     {
-        private sealed class FakeLogService : ILogService
+        private MockLogService logService = null!;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            public List<LogObject> AddedLogs { get; } = new();
-            public void AddLog(LogObject log) => AddedLogs.Add(log);
-            public List<LogObject> GetLogs() => AddedLogs;
-            public PagedResult<LogObject> GetPaginatedLogs(int page, int pageSize)
-                => new PagedResult<LogObject> { Items = AddedLogs, TotalCount = AddedLogs.Count };
+            logService = new MockLogService();
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            logService.Dispose();
         }
 
         [TestMethod]
         public void Post_ReturnsOk_And_AddsAllLogs()
         {
-            var fake = new FakeLogService();
-            var controller = new LogController(fake);
+            var controller = new LogController(logService);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -43,9 +47,9 @@ namespace LRV.Regatta.Buero.Controllers.Tests
             var result = controller.Post(logs);
 
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            Assert.AreEqual(2, fake.AddedLogs.Count);
+            Assert.AreEqual(2, logService.Logs.Count);
 
-            var first = fake.AddedLogs[0];
+            var first = logService.Logs[0];
             Assert.IsFalse(string.IsNullOrWhiteSpace(first.CreatedDate.ToString()));
             Assert.AreEqual("RegattaClient", first.ClientName);
             Assert.AreEqual("1.2.3", first.ClientVersion);
@@ -55,8 +59,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_UsesRemoteIp_FromForwardedHeader()
         {
-            var fake = new FakeLogService();
-            var controller = new LogController(fake);
+            var controller = new LogController(logService);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -72,17 +75,16 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             controller.Post(logs);
 
-            Assert.AreEqual(1, fake.AddedLogs.Count);
+            Assert.AreEqual(1, logService.Logs.Count);
 
             // Erwartetes Verhalten fachlich: Remote IP soll übernommen werden
-            Assert.AreEqual("10.1.2.3", fake.AddedLogs[0].ClientIp);
+            Assert.AreEqual("10.1.2.3", logService.Logs[0].ClientIp);
         }
 
         [TestMethod]
         public void Post_UsesClientName_FromForwardedHeader()
         {
-            var fake = new FakeLogService();
-            var controller = new LogController(fake);
+            var controller = new LogController(logService);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -98,17 +100,16 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             controller.Post(logs);
 
-            Assert.AreEqual(1, fake.AddedLogs.Count);
+            Assert.AreEqual(1, logService.Logs.Count);
 
             // Erwartetes Verhalten fachlich: Client Name soll übernommen werden
-            Assert.AreEqual("RegattaClient", fake.AddedLogs[0].ClientName);
+            Assert.AreEqual("RegattaClient", logService.Logs[0].ClientName);
         }
 
         [TestMethod]
         public void Post_UsesClientVersion_FromForwardedHeader()
         {
-            var fake = new FakeLogService();
-            var controller = new LogController(fake);
+            var controller = new LogController(logService);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -124,17 +125,16 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             controller.Post(logs);
 
-            Assert.AreEqual(1, fake.AddedLogs.Count);
+            Assert.AreEqual(1, logService.Logs.Count);
 
             // Erwartetes Verhalten fachlich: Client Version soll übernommen werden
-            Assert.AreEqual("1.2.3", fake.AddedLogs[0].ClientVersion);
+            Assert.AreEqual("1.2.3", logService.Logs[0].ClientVersion);
         }
 
         [TestMethod]
         public void Post_UsesDummy_ClientName()
         {
-            var fake = new FakeLogService();
-            var controller = new LogController(fake);
+            var controller = new LogController(logService);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Version"] = "1.2.3";
@@ -149,10 +149,10 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             controller.Post(logs);
 
-            Assert.AreEqual(1, fake.AddedLogs.Count);
+            Assert.AreEqual(1, logService.Logs.Count);
 
             // Erwartetes Verhalten fachlich: Dummy Client Name soll übernommen werden
-            Assert.AreEqual("RegattaClient", fake.AddedLogs[0].ClientName);
+            Assert.AreEqual("RegattaClient", logService.Logs[0].ClientName);
         }
     }
 }

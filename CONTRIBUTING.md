@@ -31,7 +31,7 @@ All contributors are expected to uphold it.
 
 1. Fork the repository and clone your fork.
 2. Open the project in the provided Dev Container (VS Code + Docker required).
-   The container starts MariaDB, Redis and the .NET 8 toolchain automatically.
+   The container starts MariaDB, Redis and the .NET 10 toolchain automatically.
 3. Run `dotnet restore` inside `src/` to install all dependencies.
 
 ---

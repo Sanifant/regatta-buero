@@ -12,7 +12,7 @@ namespace LRV.Regatta.Buero.Services
         private readonly ILogger<FinishService> logger;
 
         /// <summary>
-        /// Constructor for the MysqlDataService class, initializing the DatabaseContext dependency.
+        /// Constructor for the FinishService class, initializing the DatabaseContext dependency.
         /// </summary>
         /// <param name="context">The DatabaseContext instance used for accessing the database.</param>
         /// <param name="logger">The ILogger instance used for logging.</param>

@@ -7,33 +7,35 @@ namespace LRV.Regatta.Buero.Controllers.Tests
     [TestClass()]
     public class RegistrationControllerTests
     {
-        // Justification: The _registrationService field is initialized in the TestInitialize method,
-        // which is executed before each test method runs.
-#pragma warning disable CS8618 
-        private IRegistrationService _registrationService;
-#pragma warning restore CS8618 
+        private MockRegistrationService _registrationService = null!;
+
         [TestInitialize]
         public void TestInitialize()
         {
             _registrationService = new MockRegistrationService();
         }
 
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _registrationService.Dispose();
+        }
+
         [TestMethod()]
         public void Test_That_Get()
         {
             var controller = new RegistrationController(_registrationService);
-            for (int i = 0; i < 15; i++)
-            {
-                ((MockRegistrationService)_registrationService)
-                    .Registrations.Add(new RegistrationObject()
+            _registrationService.Seed(
+                Enumerable.Range(0, 15)
+                    .Select(i => new RegistrationObject()
                     {
                         Type = i % 2 == 0 ? RegistrationType.Registration : RegistrationType.LateRegistration,
                         Race = $"Race {i}",
                         StartNo = $"Race {i}",
                         Team = $"Race {i}",
                         ChairMan = $"Race {i}"
-                    });
-            }
+                    })
+                    .ToArray());
 
             var returnValue = controller.Get();
 
@@ -55,7 +57,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
 
             controller.AddRegistration(registration);
             
-            var returnValue = ((MockRegistrationService)_registrationService).Registrations.FirstOrDefault();
+            var returnValue = _registrationService.Registrations.FirstOrDefault();
             Assert.IsNotNull(returnValue);
             Assert.AreEqual(registration.Type, returnValue.Type);
             Assert.AreEqual(registration.Race, returnValue.Race);

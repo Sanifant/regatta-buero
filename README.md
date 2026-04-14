@@ -56,7 +56,7 @@ Swagger ist in Development unter `http://localhost:5015/swagger` erreichbar.
 
 ## Konfiguration
 
-Wichtige Einstellungen in `appsettings.json` und optional per Umgebungsvariablen:
+Wichtige Einstellungen per Umgebungsvariablen:
 
 - Datenbank:
   - `DB_HOST` (Standard: `localhost`)
@@ -65,17 +65,20 @@ Wichtige Einstellungen in `appsettings.json` und optional per Umgebungsvariablen
   - `DB_USER` (Standard: `regatta`)
   - `DB_PASSWORD` (Standard: `regatta`)
 - API-Key:
-  - Headername: `X-API-KEY`
-  - Konfig-Schluessel: `X-API-KEY`
+  - `X-API-KEY`
+- JWT:
+  - `JWT_KEY`
+  - `JWT_ISSUER`
+  - `JWT_AUDIENCE`
+  - `JWT_EXPIRES_MINUTES`
+- Redis:
+  - `REDIS_HOST`
+  - `REDIS_PORT`
+
+Wichtige Einstellungen per `appsettings.json`.
+
 - Bildablage:
   - `ImageFolder` (z. B. `/wwwdata/images`)
-- JWT:
-  - `JwtSettings:Key`
-  - `JwtSettings:Issuer`
-  - `JwtSettings:Audience`
-  - `JwtSettings:ExpiresInMinutes`
-- Redis:
-  - `ConnectionStrings:Redis` (z. B. `redis:6379`)
 
 Hinweis: Beim Start werden ausstehende EF-Core-Migrationen automatisch angewendet.
 
@@ -138,6 +141,38 @@ dotnet publish "src/LRV Regattabuero.sln"
 ```bash
 dotnet test "src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj"
 ```
+
+Coverage als Cobertura-Report erzeugen:
+
+```bash
+rm -rf artifacts/test-results artifacts/coverage-report
+dotnet test "src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj" --settings "coverage.runsettings" --collect:"XPlat Code Coverage" --results-directory "artifacts/test-results"
+```
+
+Der Coverage-Report wird anschliessend unter `artifacts/test-results/<run-id>/coverage.cobertura.xml` abgelegt.
+Die Datei `coverage.runsettings` schliesst aktuell den autogenerierten Namespace `LRV.Regatta.Buero.Migrations` aus.
+
+HTML-Report lokal erzeugen:
+
+```bash
+dotnet tool restore
+rm -rf artifacts/test-results artifacts/coverage-report
+dotnet test "src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj" --settings "coverage.runsettings" --collect:"XPlat Code Coverage" --results-directory "artifacts/test-results"
+dotnet tool run reportgenerator -reports:"artifacts/test-results/**/coverage.cobertura.xml" -targetdir:"artifacts/coverage-report" -reporttypes:"Html;TextSummary"
+```
+
+Der lesbare Bericht liegt danach unter `artifacts/coverage-report/index.html`.
+
+In VS Code kannst du den Ablauf auch ueber Tasks starten:
+
+```text
+Tasks: Run Task -> coverage report and serve
+```
+
+Danach den Report im Simple Browser mit `http://localhost:8000/` oeffnen.
+Zum Beenden des lokalen Servers steht der Task `stop coverage report` zur Verfuegung.
+
+In GitHub Actions wird derselbe Report ebenfalls erzeugt und als Artefakt `coverage-report` hochgeladen.
 
 Vorhandene Controller-Tests:
 

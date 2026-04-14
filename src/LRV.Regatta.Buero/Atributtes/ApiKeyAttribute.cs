@@ -23,6 +23,17 @@ namespace LRV.Regatta.Buero.Attributes
             var apiKey = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(APIKEYNAME)) ?
                 Environment.GetEnvironmentVariable(APIKEYNAME) :
                 appSettings.GetValue<string>(APIKEYNAME);
+            if(string.IsNullOrEmpty(apiKey))
+            {
+                context.Result = new ContentResult()
+                {
+                    StatusCode = 500,
+                    Content = "API Key is not configured."
+                };
+                return;
+            }
+
+
             if (!apiKey.Equals(extractedApiKey))
             {
                 context.Result = new ContentResult()
@@ -32,6 +43,7 @@ namespace LRV.Regatta.Buero.Attributes
                 };
                 return;
             }
+            
             await next();
         }
     }
