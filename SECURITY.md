@@ -40,13 +40,17 @@ This API uses two layers of authentication:
 
 **Important notes for operators:**
 
-- Change the default API key (`37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12`) before
-  any deployment. Set it via the `X-API-KEY` environment variable or
-  `appsettings.json`.
-- Replace the default JWT signing key (`DiesIstEinSehrGeheimerKey123!`) with a
-  strong, randomly generated secret before deployment.
+- Change the API key before any deployment. Set it via the `X-API-KEY` environment
+  variable or `appsettings.json`.
+- Replace the  JWT signing key with a strong, randomly generated secret before deployment.
+  Set it via the `JWT_KEY` environment variable or `appsettings.json`.
 - Database credentials (`DB_PASSWORD`) and the Redis connection string should
   be provided via environment variables and never committed to the repository.
+- Database credentials such as `DB_PASSWORD` and Redis settings such as
+  `REDIS_HOST` and `REDIS_PORT` should be provided via environment variables,
+  not committed to the repository.
+- Do not commit secret-bearing `.env` files. If local examples are needed,
+  commit only sanitized templates that contain placeholder values.
 - The CORS policy currently allows any origin (`AllowAnyOrigin`). Restrict
   it to trusted origins in production environments.
 

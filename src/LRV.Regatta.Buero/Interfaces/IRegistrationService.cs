@@ -37,9 +37,9 @@ namespace LRV.Regatta.Buero.Interfaces
         /// with the specified ID and return it if found. If no instance with the given ID exists, the method should 
         /// return null or throw an appropriate exception, depending on the design of the application.
         /// </remarks>
-        /// <param name="Id">The unique identifier of the RegistrationObject instance to be retrieved.</param>
+        /// <param name="id">The unique identifier of the RegistrationObject instance to be retrieved.</param>
         /// <returns>The RegistrationObject instance with the specified ID, or null if not found.</returns>
-        RegistrationObject GetRegistration(int Id);
+        RegistrationObject GetRegistration(int id);
 
         /// <summary>
         /// Deletes a registration from the database.

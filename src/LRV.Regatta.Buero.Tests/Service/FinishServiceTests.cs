@@ -18,7 +18,7 @@ namespace LRV.Regatta.Buero.Tests.Service
             using var ctx = CreateContext();
             var svc = new FinishService(ctx, NullLogger<FinishService>.Instance);
 
-            svc.AddFinishObject(new FinishObject { Id = 1, Name = "Zieleinlauf 1" });
+            svc.AddFinishObject(new FinishObject { Id = 1, Name = "Zieleinlauf 1", FirstPath = "P1", SecondPath = "P2"  });
 
             Assert.AreEqual(1, ctx.FinishObjects.Count());
         }
@@ -27,10 +27,10 @@ namespace LRV.Regatta.Buero.Tests.Service
         public void GetAllFinishObject_ReturnsDescendingOrder()
         {
             using var ctx = CreateContext();
+            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.SaveChanges();
             var svc = new FinishService(ctx, NullLogger<FinishService>.Instance);
-
-            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster" });
-            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter" });
 
             var result = svc.GetAllFinishObject();
 
@@ -44,8 +44,9 @@ namespace LRV.Regatta.Buero.Tests.Service
             using var ctx = CreateContext();
             var svc = new FinishService(ctx, NullLogger<FinishService>.Instance);
 
-            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster" });
-            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter" });
+            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.SaveChanges();
             
             svc.DeleteAllFinishObject();
 
@@ -58,11 +59,12 @@ namespace LRV.Regatta.Buero.Tests.Service
             using var ctx = CreateContext();
             var svc = new FinishService(ctx, NullLogger<FinishService>.Instance);
 
-            var finishObject = new FinishObject { Id = 3, Name = "X" };
+            var finishObject = new FinishObject { Id = 3, Name = "X", FirstPath = "P1", SecondPath = "P2" };
 
-            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster" });
-            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter" });
+            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter", FirstPath = "P1", SecondPath = "P2"  });
             ctx.FinishObjects.Add(finishObject);
+            ctx.SaveChanges();
 
             svc.DeleteFinishObject(finishObject);
 
@@ -75,10 +77,11 @@ namespace LRV.Regatta.Buero.Tests.Service
             using var ctx = CreateContext();
             var svc = new FinishService(ctx, NullLogger<FinishService>.Instance);
 
-            var finishObject = new FinishObject { Id = 3, Name = "X" };
+            var finishObject = new FinishObject { Id = 3, Name = "X", FirstPath = "P1", SecondPath = "P2"  };
 
-            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster" });
-            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter" });
+            ctx.FinishObjects.Add(new FinishObject { Id = 1, Name = "Erster", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.FinishObjects.Add(new FinishObject { Id = 2, Name = "Zweiter", FirstPath = "P1", SecondPath = "P2"  });
+            ctx.SaveChanges();
 
             Assert.ThrowsException<KeyNotFoundException>(() => svc.DeleteFinishObject(finishObject));
         }

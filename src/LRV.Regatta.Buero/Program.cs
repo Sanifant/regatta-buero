@@ -44,8 +44,6 @@ namespace LRV.Regatta.Buero
 
             var connectionString = $"Server={dbHost};Database={dbName};User={dbUser};Password={dbPassword};";
 
-            Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using \"{connectionString}\"");
-
             MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(11, 4, 5));
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
@@ -106,9 +104,7 @@ namespace LRV.Regatta.Buero
                 c.AddSecurityRequirement(securityRequirement);
             });
 
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-            var secretKey = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key"));
+            var secretKey = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
 
             builder.Services.AddAuthentication(options =>
             {
@@ -122,8 +118,8 @@ namespace LRV.Regatta.Buero
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.GetValue<string>("Issuer"),
-                    ValidAudience = jwtSettings.GetValue<string>("Audience"),
+                    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                    ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
                     IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                 };
             });

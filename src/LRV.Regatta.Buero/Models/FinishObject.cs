@@ -18,11 +18,11 @@
         /// <summary>
         /// Gets or sets the first path of the finish object.
         /// </summary>
-        public string FirstPath { get; internal set; }
+        public string FirstPath { get; set; }
 
         /// <summary>
         /// Gets or sets the second path of the finish object.
         /// </summary>
-        public string SecondPath { get; internal set; }
+        public string SecondPath { get; set; }
     }
 }

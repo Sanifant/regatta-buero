@@ -48,20 +48,20 @@ namespace LRV.Regatta.Buero.Services
         /// <exception cref="InvalidOperationException">Thrown when no registration is found with the specified ID.</exception>
         /// <param name="Id">The ID of the registration to retrieve.</param>
         /// <returns>The registration object with the specified ID.</returns>
-        public RegistrationObject GetRegistration(int Id)
+        public RegistrationObject GetRegistration(int id)
         {
-            if(Id <= 0)
+            if(id <= 0)
             {
-                this.logger.LogError("Invalid ID: {Id}. ID must be greater than zero.", Id);
-                throw new ArgumentException("ID must be greater than zero.", nameof(Id));
+                this.logger.LogError("Invalid ID: {Id}. ID must be greater than zero.", id);
+                throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
 
-            var registration = this.databaseContext.RegistrationObjects.FirstOrDefault(r => r.Id == Id);
+            var registration = this.databaseContext.RegistrationObjects.FirstOrDefault(r => r.Id == id);
 
             if(registration == null)
             {
-                this.logger.LogError("No registration found with ID {Id}.", Id);
-                throw new InvalidOperationException($"No registration found with ID {Id}.");
+                this.logger.LogError("No registration found with ID {Id}.", id);
+                throw new InvalidOperationException($"No registration found with ID {id}.");
             }
 
             return registration;
