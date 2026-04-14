@@ -74,8 +74,10 @@ dotnet run --project src/LRV.Regatta.Buero/LRV.Regatta.Buero.csproj
 
 Swagger UI is available at `http://localhost:5015/swagger` in Development mode.
 
-The default development API key is `37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12`
-(set via the `X-API-KEY` header or environment variable).
+For local development, set the API key in your local `.env` file using the
+provided template. Use a placeholder such as `CHANGE_ME_LOCAL_ONLY` until you
+configure your own value, then send it via the `X-API-KEY` header or the
+corresponding environment variable.
 
 ---
 
