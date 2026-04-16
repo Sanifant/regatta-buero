@@ -36,6 +36,46 @@
                 "${workspaceFolder}/src/LRV Regattabuero.sln"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "coverage report",
+            "type": "shell",
+            "command": "rm -rf artifacts/test-results artifacts/coverage-report && dotnet tool restore && dotnet test \"src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj\" --settings \"coverage.runsettings\" --collect:\"XPlat Code Coverage\" --results-directory \"artifacts/test-results\" && dotnet tool run reportgenerator -reports:\"artifacts/test-results/**/coverage.cobertura.xml\" -targetdir:\"artifacts/coverage-report\" -reporttypes:\"Html;TextSummary\"",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "serve coverage report",
+            "type": "shell",
+            "command": "dotnet tool restore && dotnet tool run dotnet-serve --directory artifacts/coverage-report --port 8000 --address 127.0.0.1",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "."
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": "Listening on:"
+                }
+            }
+        },
+        {
+            "label": "stop coverage report",
+            "type": "shell",
+            "command": "lsof -ti tcp:8000 | xargs -r kill",
+            "problemMatcher": []
+        },
+        {
+            "label": "coverage report and serve",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "coverage report",
+                "serve coverage report"
+            ],
+            "problemMatcher": []
         }
     ]
 }

@@ -1,11 +1,13 @@
 ﻿using LRV.Regatta.Buero.Attributes;
+using LRV.Regatta.Buero.Interfaces;
 using LRV.Regatta.Buero.Models;
-using LRV.Regatta.Buero.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LRV.Regatta.Buero.Controllers
 {
+    /// <summary>
+    /// FinishController class that handles HTTP requests related to finish line data in the regatta management system. This controller includes endpoints for retrieving all finish objects, uploading new finish objects with associated images, and deleting finish objects. The controller uses the IFinishService to manage finish line data and relies on configuration settings for file storage paths. It also includes an API key attribute for securing the endpoints.
+    /// </summary>
     [ApiKey]
     [Route("api/[controller]")]
     [ApiController]
@@ -16,6 +18,11 @@ namespace LRV.Regatta.Buero.Controllers
         private readonly IConfiguration _configuration;
         private readonly string folderpath;
 
+        /// <summary>
+        /// Constructor for the FinishController class, initializing the IFinishService and IConfiguration dependencies. This constructor sets up the necessary services for managing finish line data and accessing configuration settings, as well as determining the folder path for storing uploaded images based on environment variables or configuration values.
+        /// </summary>
+        /// <param name="storage">The IFinishService instance for managing finish line data.</param>
+        /// <param name="config">The IConfiguration instance for accessing configuration settings.</param>
         public FinishController(IFinishService storage, IConfiguration config)
         {
             this._finishService = storage;
@@ -75,7 +82,10 @@ namespace LRV.Regatta.Buero.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// Processes the DELETE HTTP Verb, deleting all Finish Objects and their associated image files from the server. This method clears the in-memory collection of finish line data and removes all files from the specified folder path, effectively resetting the finish line information in the regatta management system.
+        /// </summary>
+        /// <returns>An IActionResult indicating the result of the delete operation.</returns>
         [HttpDelete()]
         public IActionResult Delete()
         {
@@ -89,6 +99,11 @@ namespace LRV.Regatta.Buero.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Processes the DELETE HTTP Verb for a specific Finish Object, deleting the object and its associated image files from the server. This method removes the specified finish line data from the in-memory collection and deletes the corresponding image files from the folder path.
+        /// </summary>
+        /// <param name="id">The ID of the Finish Object to delete.</param>
+        /// <returns>An IActionResult indicating the result of the delete operation.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

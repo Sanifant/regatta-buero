@@ -6,5 +6,10 @@
             "addWords": true,
             "scope": "workspace"
         }
-    }
+    },
+    "cSpell.languageSettings": [
+        {"languageId":"csharp", "locale": "en", "dictionaries": ["custom-dictionary-workspace"]},
+        {"languageId":"markdown", "locale": "de", "dictionaries": ["custom-dictionary-workspace"]}
+    ],
+    "cSpell.language": "en,de-de"
 }

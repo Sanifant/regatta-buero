@@ -3,18 +3,15 @@ using LRV.Regatta.Buero.Services;
 using LRV.Regatta.Buero.Models;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.DependencyInjection;
+using LRV.Regatta.Buero.Interfaces;
 
 namespace LRV.Regatta.Buero
 {
@@ -47,20 +44,18 @@ namespace LRV.Regatta.Buero
 
             var connectionString = $"Server={dbHost};Database={dbName};User={dbUser};Password={dbPassword};";
 
-            Console.WriteLine($"Connecting to DB {dbHost}:{dbPort} using \"{connectionString}\"");
-
             MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(11, 4, 5));
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
                     connectionString,
                     serverVersion
                 )
-                .LogTo(Console.WriteLine, LogLevel.Information)
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
             );
 
-            builder.Services.AddScoped<IFinishService, MysqlDataService>();
-            builder.Services.AddScoped<IRegistrationService, MysqlDataService>();
-            builder.Services.AddScoped<ILogService, MysqlDataService>();
+            builder.Services.AddScoped<IFinishService, FinishService>();
+            builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+            builder.Services.AddScoped<ILogService, LogService>();
 
             builder.Services
                 .AddControllers()
@@ -83,13 +78,12 @@ namespace LRV.Regatta.Buero
                 c.IgnoreObsoleteActions();
                 c.IncludeXmlComments(Assembly.GetExecutingAssembly());
 
-                // Füge die API Key-Definition hinzu
                 c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Name = "X-API-KEY",
                     Type = SecuritySchemeType.ApiKey,
-                    Description = "Fügen Sie hier den API Key ein"
+                    Description = "Insert Api-Key here"
                 });
 
                 var securityRequirement = new OpenApiSecurityRequirement
@@ -110,9 +104,7 @@ namespace LRV.Regatta.Buero
                 c.AddSecurityRequirement(securityRequirement);
             });
 
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-            var secretKey = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key"));
+            var secretKey = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY"));
 
             builder.Services.AddAuthentication(options =>
             {
@@ -126,15 +118,15 @@ namespace LRV.Regatta.Buero
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.GetValue<string>("Issuer"),
-                    ValidAudience = jwtSettings.GetValue<string>("Audience"),
+                    ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+                    ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
                     IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                 };
             });
 
             builder.Services.AddHealthChecks()
                 .AddRedis(
-                    redisConnectionString: builder.Configuration.GetConnectionString("Redis"),
+                    redisConnectionString: $"{builder.Configuration["REDIS_HOST"]}:{builder.Configuration["REDIS_PORT"]}",
                     name: "redis",
                     failureStatus: HealthStatus.Unhealthy,
                     tags: new[] { "ready" })

@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 src/LRV.Regatta.Buero/Regatta-Test/*.*
 /src/.idea/.idea.LRV Regattabuero/.idea
+
+# Local configuration files (never commit these!)
+tools/.env
