@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
+using Prometheus;
 
 namespace LRV.Regatta.Buero
 {
@@ -110,6 +111,7 @@ namespace LRV.Regatta.Buero
                 c.AddSecurityRequirement(securityRequirement);
             });
 
+            /*
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             var secretKey = Encoding.UTF8.GetBytes(jwtSettings.GetValue<string>("Key"));
@@ -131,7 +133,7 @@ namespace LRV.Regatta.Buero
                     IssuerSigningKey = new SymmetricSecurityKey(secretKey),
                 };
             });
-
+            */
             builder.Services.AddHealthChecks()
                 .AddRedis(
                     redisConnectionString: builder.Configuration.GetConnectionString("Redis"),
@@ -182,6 +184,8 @@ namespace LRV.Regatta.Buero
                 }
             });
 
+            app.UseHttpMetrics();
+            app.MapMetrics();
 
             using IServiceScope scope = app.Services.CreateScope();
 
