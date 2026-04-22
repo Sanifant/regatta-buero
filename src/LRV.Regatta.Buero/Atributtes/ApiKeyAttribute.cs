@@ -7,6 +7,8 @@ namespace LRV.Regatta.Buero.Attributes
     public class ApiKeyAttribute : Attribute, IAsyncActionFilter
     {
         public static string APIKEYNAME = "X-API-KEY";
+        public static string APIKEYCONFIGURATIONNAME = "API_KEY";
+        public static string APIKEYLEGACYCONFIGURATIONNAME = "X_API_KEY";
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -20,9 +22,30 @@ namespace LRV.Regatta.Buero.Attributes
                 return;
             }
             var appSettings = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-            var apiKey = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(APIKEYNAME)) ?
-                Environment.GetEnvironmentVariable(APIKEYNAME) :
-                appSettings.GetValue<string>(APIKEYNAME);
+            var apiKey = Environment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME);
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                apiKey = Environment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME);
+            }
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                apiKey = appSettings.GetValue<string>(APIKEYCONFIGURATIONNAME);
+            }
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                apiKey = appSettings.GetValue<string>(APIKEYNAME);
+            }
+            if(string.IsNullOrEmpty(apiKey))
+            {
+                context.Result = new ContentResult()
+                {
+                    StatusCode = 500,
+                    Content = "API Key is not configured."
+                };
+                return;
+            }
+
+
             if (!apiKey.Equals(extractedApiKey))
             {
                 context.Result = new ContentResult()
@@ -32,6 +55,7 @@ namespace LRV.Regatta.Buero.Attributes
                 };
                 return;
             }
+            
             await next();
         }
     }

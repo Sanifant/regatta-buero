@@ -6,19 +6,19 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: example_root_password
-      MYSQL_DATABASE: regatta_database
-      MYSQL_USER: regatta
-      MYSQL_PASSWORD: regatta
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
 
   phpmyadmin:
     image: phpmyadmin:latest
     ports:
       - 8080:80
     environment:
-      PMA_HOST: regattadb
-      PMA_USER: regatta
-      PMA_PASSWORD: regatta
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - regattadb
   
