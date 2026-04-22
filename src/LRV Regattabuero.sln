@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.5.11709.299 stable
+VisualStudioVersion = 18.5.11709.299
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRV.Regatta.Buero", "LRV.Regatta.Buero\LRV.Regatta.Buero.csproj", "{E01094FC-DF3C-4B46-9642-807DCC5EEF9C}"
 EndProject
@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{02EA681E
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\tools\docker-compose.yml = ..\tools\docker-compose.yml
+		..\README.md = ..\README.md
 		..\tools\UploadMeldungen.ps1 = ..\tools\UploadMeldungen.ps1
 	EndProjectSection
 EndProject

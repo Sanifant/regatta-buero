@@ -2,7 +2,7 @@ services:
   lrv.regatta.buero:
     image: ${DOCKER_REGISTRY-}lrvregattabuero
     build:
-      context: LRV.Regatta.Buero
+      context: ../LRV.Regatta.Buero
       dockerfile: Dockerfile
     environment:
       DB_HOST: ${DB_HOST:-regattadb}
@@ -27,7 +27,7 @@ services:
   phpmyadmin:
     image: phpmyadmin:5.2.1
     ports:
-      - 8080:80
+      - 8000:80
     environment:
       PMA_HOST: ${DB_HOST:-regattadb}
       PMA_USER: ${DB_USER:-regatta}

@@ -16,12 +16,31 @@ Das Projekt stellt REST-Endpunkte fuer Meldungen, Vereine, Zieleinlaeufe und Log
 - Authentifizierung:
   - `X-API-KEY` fuer gesicherte Controller
   - JWT-Token ueber Login-Endpunkt
+- Observability: OpenTelemetry Metrics
 
 ## Projektstruktur
 
-- `src/LRV.Regatta.Buero`: Hauptanwendung (Web API)
-- `src/LRV.Regatta.Buero.Tests`: Unit-Tests (MSTest)
-- `tools/docker-compose.yml`: Lokale Infrastruktur (MariaDB, phpMyAdmin, Redis, RedisInsight)
+```
+regatta-buero/
+├── src/
+│   ├── LRV.Regatta.Buero/              # Hauptanwendung (Web API)
+│   │   ├── Attributes/                 # ApiKeyAttribute (API-Key-Authentifizierung)
+│   │   ├── Controllers/                # FinishController, LogController, LoginController,
+│   │   │                               #   RegistrationController, TeamController
+│   │   ├── Interfaces/                 # IFinishService, ILogService, IRegistrationService
+│   │   ├── Migrations/                 # EF-Core-Datenbankmigrationen
+│   │   ├── Models/                     # Datenmodelle (FinishObject, LogObject, TeamObject, …)
+│   │   ├── Services/                   # DatabaseContext, FinishService, LogService,
+│   │   │                               #   RegistrationService
+│   │   └── Program.cs
+│   └── LRV.Regatta.Buero.Tests/        # Unit-Tests (MSTest)
+│       ├── Controllers/                # Controller-Tests
+│       ├── Helpers/                    # DatabaseContextFactory
+│       ├── Mocks/                      # MockLogService, MockRegistrationService
+│       └── Service/                    # Service-Tests
+└── tools/
+    └── docker-compose.yml              # Lokale Infrastruktur (MariaDB, phpMyAdmin, Redis, RedisInsight)
+```
 
 ## Voraussetzungen
 
@@ -39,10 +58,12 @@ docker compose --env-file tools/.env -f tools/docker-compose.yml up -d
 
 Verfuegbare Services:
 
-- MariaDB: `localhost:3306`
-- phpMyAdmin: `http://localhost:8080`
-- Redis: `localhost:6379`
-- RedisInsight: `http://localhost:5540`
+| Service       | URL / Adresse             |
+|---------------|---------------------------|
+| MariaDB       | `localhost:3306`          |
+| phpMyAdmin    | `http://localhost:8080`   |
+| Redis         | `localhost:6379`          |
+| RedisInsight  | `http://localhost:5540`   |
 
 ### 2. API starten
 
@@ -55,83 +76,122 @@ Standard-URL (Development): `http://localhost:5015`
 
 Swagger ist in Development unter `http://localhost:5015/swagger` erreichbar.
 
+> **Hinweis:** Beim Start werden ausstehende EF-Core-Migrationen automatisch angewendet.
+
 ## Konfiguration
 
-Wichtige Einstellungen per Umgebungsvariablen:
+### Umgebungsvariablen
 
-- Datenbank:
-  - `DB_HOST` (Standard: `localhost`)
-  - `DB_PORT` (Standard: `3306`)
-  - `DB_NAME` (Standard: `regatta_database`)
-  - `DB_USER` (Standard: `regatta`)
-  - `DB_PASSWORD` (Standard: `regatta`)
-- API-Key:
-  - `X-API-KEY`
-- JWT:
-  - `JWT_KEY`
-  - `JWT_ISSUER`
-  - `JWT_AUDIENCE`
-  - `JWT_EXPIRES_MINUTES`
-- Redis:
-  - `REDIS_HOST`
-  - `REDIS_PORT`
+| Variable               | Beschreibung                         | Standard             |
+|------------------------|--------------------------------------|----------------------|
+| `DB_HOST`              | Datenbankhost                        | `localhost`          |
+| `DB_PORT`              | Datenbankport                        | `3306`               |
+| `DB_NAME`              | Datenbankname                        | `regatta_database`   |
+| `DB_USER`              | Datenbankbenutzer                    | `regatta`            |
+| `DB_PASSWORD`          | Datenbankpasswort                    | `regatta`            |
+| `API_KEY`              | API-Key fuer gesicherte Endpunkte    | –                    |
+| `X_API_KEY`            | API-Key (Legacy-Fallback)            | –                    |
+| `JWT_KEY`              | Geheimer Schluessel fuer JWT         | –                    |
+| `JWT_ISSUER`           | JWT Issuer                           | –                    |
+| `JWT_AUDIENCE`         | JWT Audience                         | –                    |
+| `JWT_EXPIRES_MINUTES`  | JWT-Ablaufzeit in Minuten            | –                    |
+| `REDIS_HOST`           | Redis-Host                           | –                    |
+| `REDIS_PORT`           | Redis-Port                           | –                    |
+| `ImageFolder`          | Ablageordner fuer Zieleinlauf-Bilder | –                    |
 
-Wichtige Einstellungen per `appsettings.json`.
+### appsettings.json
 
-- Bildablage:
-  - `ImageFolder` (z. B. `/wwwdata/images`)
+Alle obigen Werte koennen alternativ ueber `appsettings.json` konfiguriert werden.  
+Umgebungsvariablen haben dabei Vorrang.
 
-Hinweis: Beim Start werden ausstehende EF-Core-Migrationen automatisch angewendet.
-
-## API-Endpunkte (Auszug)
+## API-Endpunkte
 
 Basisroute: `api/{Controller}`
 
 ### Oeffentlich
 
-- `GET /api/Login`
-- `POST /api/Login`
-  - Demo-Login: `testuser` / `password`
-  - Liefert JWT Token
+| Methode | Route         | Beschreibung                                     |
+|---------|---------------|--------------------------------------------------|
+| `GET`   | `/api/Login`  | Prueft Login-Status                              |
+| `POST`  | `/api/Login`  | Liefert JWT-Token (Demo: `testuser` / `password`)|
 
-### Mit API-Key (`X-API-KEY`)
+### Mit API-Key (`X-API-KEY` Header erforderlich)
 
-- Registration
-  - `GET /api/Registration`
-  - `PUT /api/Registration`
-- Team
-  - `POST /api/Team` (XML-Import)
-  - `GET /api/Team`
-  - `GET /api/Team/select?teamName=...`
-  - `DELETE /api/Team`
-- Finish
-  - `GET /api/Finish`
-  - `POST /api/Finish` (`multipart/form-data`)
-  - `DELETE /api/Finish`
-  - `DELETE /api/Finish/{id}`
-- Log
-  - `POST /api/Log`
-  - `GET /api/Log`
-  - `GET /api/Log/search?page=1&pageSize=10`
+#### Registration
+
+| Methode | Route                | Beschreibung                      |
+|---------|----------------------|-----------------------------------|
+| `GET`   | `/api/Registration`  | Alle Meldungen abrufen            |
+| `PUT`   | `/api/Registration`  | Neue Meldung hinzufuegen          |
+
+#### Team
+
+| Methode | Route                          | Beschreibung                        |
+|---------|--------------------------------|-------------------------------------|
+| `POST`  | `/api/Team`                    | Vereine per XML-Import hochladen    |
+| `GET`   | `/api/Team`                    | Alle Vereine abrufen                |
+| `GET`   | `/api/Team/select?teamName=…`  | Verein nach Name suchen             |
+| `DELETE`| `/api/Team`                    | Alle Vereinsdaten loeschen          |
+
+**XML-Format fuer Team-Import:**
+
+```xml
+<RegattaMeldungen>
+  <Vereine>
+    <TeamObject>
+      <Name>Ludwigsburger Ruderverein</Name>
+      <Kurzform>LRV</Kurzform>
+      <Lettern>L</Lettern>
+    </TeamObject>
+  </Vereine>
+</RegattaMeldungen>
+```
+
+#### Finish (Zieleinlauf)
+
+| Methode | Route               | Beschreibung                                  |
+|---------|---------------------|-----------------------------------------------|
+| `GET`   | `/api/Finish`       | Alle Zieleinlauf-Objekte abrufen              |
+| `POST`  | `/api/Finish`       | Neuen Zieleinlauf hochladen (`multipart/form-data`, inkl. Bild) |
+| `DELETE`| `/api/Finish`       | Alle Zieleinlauf-Objekte loeschen             |
+| `DELETE`| `/api/Finish/{id}`  | Einzelnen Zieleinlauf loeschen                |
+
+#### Log
+
+| Methode | Route                               | Beschreibung                                          |
+|---------|-------------------------------------|-------------------------------------------------------|
+| `POST`  | `/api/Log`                          | Log-Eintraege senden (Liste von `LogObject`)          |
+| `GET`   | `/api/Log`                          | Alle Log-Eintraege abrufen                            |
+| `GET`   | `/api/Log/search?page=1&pageSize=10`| Paginierte Log-Eintraege abrufen                      |
+
+**Log-Request-Header (werden serverseitig ausgewertet):**
+
+| Header              | Beschreibung                  |
+|---------------------|-------------------------------|
+| `X-Client-Name`     | Name des sendenden Clients    |
+| `X-Client-Version`  | Version des sendenden Clients |
+| `X-Forwarded-For`   | Client-IP (Proxy-Weiterleitung)|
 
 ## Health Check
 
-- `GET /health`
+```
+GET /health
+```
 
-Der Endpunkt prueft aktuell:
+Prueft den Status folgender Abhaengigkeiten:
 
 - Redis
-- MySQL/MariaDB
+- MySQL / MariaDB
 
 ## Entwicklung
 
-Build:
+**Build:**
 
 ```bash
 dotnet build "src/LRV Regattabuero.sln"
 ```
 
-Publish:
+**Publish:**
 
 ```bash
 dotnet publish "src/LRV Regattabuero.sln"
@@ -143,6 +203,23 @@ dotnet publish "src/LRV Regattabuero.sln"
 dotnet test "src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj"
 ```
 
+### Vorhandene Tests
+
+**Controller-Tests:**
+
+- `FinishControllerTests`
+- `LogControllerTests`
+- `RegistrationControllerTests`
+- `TeamControllerTests`
+
+**Service-Tests:**
+
+- `FinishServiceTests`
+- `LogServiceTests`
+- `RegistrationServiceTests`
+
+### Code Coverage
+
 Coverage als Cobertura-Report erzeugen:
 
 ```bash
@@ -150,10 +227,10 @@ rm -rf artifacts/test-results artifacts/coverage-report
 dotnet test "src/LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj" --settings "coverage.runsettings" --collect:"XPlat Code Coverage" --results-directory "artifacts/test-results"
 ```
 
-Der Coverage-Report wird anschliessend unter `artifacts/test-results/<run-id>/coverage.cobertura.xml` abgelegt.
-Die Datei `coverage.runsettings` schliesst aktuell den autogenerierten Namespace `LRV.Regatta.Buero.Migrations` aus.
+Der Coverage-Report wird unter `artifacts/test-results/<run-id>/coverage.cobertura.xml` abgelegt.  
+Die Datei `coverage.runsettings` schliesst den autogenerierten Namespace `LRV.Regatta.Buero.Migrations` aus.
 
-HTML-Report lokal erzeugen:
+**HTML-Report lokal erzeugen:**
 
 ```bash
 dotnet tool restore
@@ -164,19 +241,13 @@ dotnet tool run reportgenerator -reports:"artifacts/test-results/**/coverage.cob
 
 Der lesbare Bericht liegt danach unter `artifacts/coverage-report/index.html`.
 
-In VS Code kannst du den Ablauf auch ueber Tasks starten:
+In VS Code kann der Ablauf auch ueber Tasks gestartet werden:
 
-```text
+```
 Tasks: Run Task -> coverage report and serve
 ```
 
-Danach den Report im Simple Browser mit `http://localhost:8000/` oeffnen.
+Danach den Report im Simple Browser mit `http://localhost:8000/` oeffnen.  
 Zum Beenden des lokalen Servers steht der Task `stop coverage report` zur Verfuegung.
 
-In GitHub Actions wird derselbe Report ebenfalls erzeugt und als Artefakt `coverage-report` hochgeladen.
-
-Vorhandene Controller-Tests:
-
-- FinishController
-- RegistrationController
-- TeamController
+In GitHub Actions wird derselbe Report erzeugt und als Artefakt `coverage-report` hochgeladen.
