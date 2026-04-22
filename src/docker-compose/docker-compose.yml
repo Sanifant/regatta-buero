@@ -1,0 +1,48 @@
+services:
+  lrv.regatta.buero:
+    image: ${DOCKER_REGISTRY-}lrvregattabuero
+    build:
+      context: LRV.Regatta.Buero
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: ${DB_HOST:-regattadb}
+      DB_PORT: ${DB_PORT:-3306} # Default-Port
+      DB_NAME: ${DB_NAME:-regatta_database}
+      DB_USER: ${DB_USER:-regatta}
+      DB_PASSWORD: ${DB_PASSWORD:-regatta}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      ImageFolder: ${IMAGE_FOLDER:-/app/images}
+      X-API-KEY: ${X_API_KEY:-mysecretkey}
+      
+  regattadb:
+    image: mariadb:11.4
+    command: '--default-authentication-plugin=mysql_native_password'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-admin}
+      MYSQL_DATABASE: ${DB_NAME:-regatta_database}
+      MYSQL_USER: ${DB_USER:-regatta}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-regatta}
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: ${DB_HOST:-regattadb}
+      PMA_USER: ${DB_USER:-regatta}
+      PMA_PASSWORD: ${DB_PASSWORD:-regatta}
+    depends_on:
+      - regattadb
+  
+  redis:
+    image: redis:7
+
+  redisInsights:
+    image: redis/redisinsight:2.54.0
+    ports:
+      - 5540:5540
+    depends_on:
+      - redis
+    environment:
+      - RI_REDIS_HOST=redis

@@ -1,20 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35222.181
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11709.299 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LRV.Regatta.Buero", "LRV.Regatta.Buero\LRV.Regatta.Buero.csproj", "{E01094FC-DF3C-4B46-9642-807DCC5EEF9C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A69E241B-4C63-4EAB-8BE3-0D04B8D5BF49}"
-	ProjectSection(SolutionItems) = preProject
-		..\.gitignore = ..\.gitignore
-		docker-compose.yml = docker-compose.yml
-		..\tools\docker-compose.yml = ..\tools\docker-compose.yml
-		..\.github\workflows\docker-publish.yml = ..\.github\workflows\docker-publish.yml
-		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
-		..\README.md = ..\README.md
-		..\tools\UploadMeldungen.ps1 = ..\tools\UploadMeldungen.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{B87CB1D4-4C13-4056-AF97-65D709F84606}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{02EA681E
 		..\tools\UploadMeldungen.ps1 = ..\tools\UploadMeldungen.ps1
 	EndProjectSection
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +35,10 @@ Global
 		{52483271-043E-48F0-8E10-67A471DD2E28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52483271-043E-48F0-8E10-67A471DD2E28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52483271-043E-48F0-8E10-67A471DD2E28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
