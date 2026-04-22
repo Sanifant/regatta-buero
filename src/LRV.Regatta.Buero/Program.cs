@@ -13,6 +13,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
+using LRV.Regatta.Buero.Interfaces;
 
 namespace LRV.Regatta.Buero
 {
