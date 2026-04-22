@@ -1,19 +1,15 @@
 
-using LRV.Regatta.Buero.Services;
-using LRV.Regatta.Buero.Models;
-using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Text.Json;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.DependencyInjection;
-using Prometheus;
 using LRV.Regatta.Buero.Interfaces;
+using LRV.Regatta.Buero.Services;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LRV.Regatta.Buero
 {
@@ -65,7 +61,8 @@ namespace LRV.Regatta.Buero
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
-            
+
+#if DEBUG
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -105,7 +102,16 @@ namespace LRV.Regatta.Buero
 
                 c.AddSecurityRequirement(securityRequirement);
             });
+#endif
 
+            // Add OpenTelemetry Metrics
+            builder.Services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService("LRV.Regatta.Buero"))
+            .WithMetrics(metrics =>
+            {
+                metrics.AddAspNetCoreInstrumentation();
+                metrics.AddPrometheusExporter();
+            });
             /*
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
@@ -159,6 +165,8 @@ namespace LRV.Regatta.Buero
             app.UseAuthorization();
             app.MapControllers();
 
+            app.MapPrometheusScrapingEndpoint();
+
             app.MapHealthChecks("/health", new HealthCheckOptions
             {
                 ResponseWriter = async (context, report) =>
@@ -179,8 +187,6 @@ namespace LRV.Regatta.Buero
                 }
             });
 
-            app.UseHttpMetrics();
-            app.MapMetrics();
 
             using IServiceScope scope = app.Services.CreateScope();
 
