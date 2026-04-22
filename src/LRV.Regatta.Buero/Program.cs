@@ -126,7 +126,7 @@ namespace LRV.Regatta.Buero
 
             builder.Services.AddHealthChecks()
                 .AddRedis(
-                    redisConnectionString: $"{builder.Configuration["REDIS_HOST"]}:{builder.Configuration["REDIS_PORT"]}",
+                    redisConnectionString: $"{Environment.GetEnvironmentVariable("REDIS_HOST")}:{Environment.GetEnvironmentVariable("REDIS_PORT")}",
                     name: "redis",
                     failureStatus: HealthStatus.Unhealthy,
                     tags: new[] { "ready" })
