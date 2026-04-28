@@ -5,8 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "watch": "ng serve --configuration development",
+    "build:watch": "ng build --watch --configuration development",
+    "test": "ng test regatta-frontend"
   },
   "private": true,
   "dependencies": {

@@ -1,7 +1,7 @@
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {AsyncPipe, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 import {UserObject} from "../models/user.model";
 
@@ -9,8 +9,7 @@ import {UserObject} from "../models/user.model";
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    NgIf,
-    AsyncPipe
+    NgIf
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
