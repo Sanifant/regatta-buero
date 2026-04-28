@@ -44,7 +44,7 @@ namespace LRV.Regatta.Buero.Attributes
                 context.Result = new ContentResult()
                 {
                     StatusCode = 401,
-                    Content = "Not Authorized"
+                    Content = "Not Authorized (No API Key)"
                 };
                 return;
             }
