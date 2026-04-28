@@ -34,3 +34,4 @@ server {
         stub_status;
         allow all;
     }
+}
