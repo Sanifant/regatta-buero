@@ -14,14 +14,16 @@
     public class LogController : ControllerBase
     {
         private readonly ILogService logService;
+        private readonly ILogger logger;
 
         /// <summary>
         /// Constructor for the LogController class, initializing the ILogService dependency. This constructor sets up the necessary service for managing log data in the regatta management system, allowing the controller to handle log-related HTTP requests effectively.
         /// </summary>
         /// <param name="logService">The ILogService instance used for managing log data.</param>
-        public LogController(ILogService logService)
+        public LogController(ILogService logService, ILogger<LogController> logger)
         {
             this.logService = logService;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -45,6 +47,7 @@
                 log.Exception = log.Exception ?? null;
 
                 logService.AddLog(log);
+                logger.LogInformation($"Received log from {log.ClientName} (version: {log.ClientVersion}, IP: {log.ClientIp}): {log.Message}");
             }
 
             return Ok(new { success = true, received = logs.Count });

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
+
 namespace LRV.Regatta.Buero.Attributes
 {
     /// <summary>
@@ -39,32 +40,37 @@ namespace LRV.Regatta.Buero.Attributes
         /// <response code="500">Serverseitig ist kein API-Key konfiguriert.</response>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var logger = context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<ApiKeyAttribute>>();
+
             if (!context.HttpContext.Request.Headers.TryGetValue(APIKEYNAME, out var extractedApiKey))
             {
-                context.Result = new ContentResult()
+                logger.LogWarning(
+                    "Request ohne API-Key. Path: {Path}, RemoteIp: {RemoteIp}",
+                    context.HttpContext.Request.Path,
+                    context.HttpContext.Connection.RemoteIpAddress);
+
+                context.Result = new ContentResult
                 {
                     StatusCode = 401,
                     Content = "Not Authorized (No API Key)"
                 };
                 return;
             }
+
             var appSettings = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-            var apiKey = Environment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME);
+            var apiKey = Environment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME)
+                         ?? Environment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME)
+                         ?? appSettings.GetValue<string>(APIKEYCONFIGURATIONNAME)
+                         ?? appSettings.GetValue<string>(APIKEYNAME);
+
             if (string.IsNullOrEmpty(apiKey))
             {
-                apiKey = Environment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME);
-            }
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                apiKey = appSettings.GetValue<string>(APIKEYCONFIGURATIONNAME);
-            }
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                apiKey = appSettings.GetValue<string>(APIKEYNAME);
-            }
-            if(string.IsNullOrEmpty(apiKey))
-            {
-                context.Result = new ContentResult()
+                logger.LogError(
+                    "API-Key ist nicht konfiguriert. Path: {Path}",
+                    context.HttpContext.Request.Path);
+
+                context.Result = new ContentResult
                 {
                     StatusCode = 500,
                     Content = "API Key is not configured."
@@ -72,18 +78,24 @@ namespace LRV.Regatta.Buero.Attributes
                 return;
             }
 
-
             if (!apiKey.Equals(extractedApiKey))
             {
-                context.Result = new ContentResult()
+                logger.LogWarning(
+                    "Ungültiger API-Key. Path: {Path}, RemoteIp: {RemoteIp}",
+                    context.HttpContext.Request.Path,
+                    context.HttpContext.Connection.RemoteIpAddress);
+
+                context.Result = new ContentResult
                 {
                     StatusCode = 401,
                     Content = "Not Authorized"
                 };
                 return;
             }
-            
+
+            logger.LogDebug("API-Key validiert. Path: {Path}", context.HttpContext.Request.Path);
             await next();
         }
     }
 }
+          

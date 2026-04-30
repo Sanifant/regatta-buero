@@ -3,6 +3,7 @@ using LRV.Regatta.Buero.Models;
 using LRV.Regatta.Buero.Tests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace LRV.Regatta.Buero.Controllers.Tests
 {
@@ -26,7 +27,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_ReturnsOk_And_AddsAllLogs()
         {
-            var controller = new LogController(logService);
+            var controller = new LogController(logService, NullLogger<LogController>.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -59,7 +60,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_UsesRemoteIp_FromForwardedHeader()
         {
-            var controller = new LogController(logService);
+            var controller = new LogController(logService, NullLogger<LogController>.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -84,7 +85,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_UsesClientName_FromForwardedHeader()
         {
-            var controller = new LogController(logService);
+            var controller = new LogController(logService, NullLogger<LogController>.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -109,7 +110,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_UsesClientVersion_FromForwardedHeader()
         {
-            var controller = new LogController(logService);
+            var controller = new LogController(logService, NullLogger<LogController>.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Name"] = "RegattaClient";
@@ -134,7 +135,7 @@ namespace LRV.Regatta.Buero.Controllers.Tests
         [TestMethod]
         public void Post_UsesDummy_ClientName()
         {
-            var controller = new LogController(logService);
+            var controller = new LogController(logService, NullLogger<LogController>.Instance);
 
             var httpContext = new DefaultHttpContext();
             httpContext.Request.Headers["X-Client-Version"] = "1.2.3";

@@ -17,19 +17,23 @@ namespace LRV.Regatta.Buero.Controllers
         private readonly IFinishService _finishService;
         private readonly IConfiguration _configuration;
         private readonly string folderpath;
+        private readonly ILogger logger;
 
         /// <summary>
         /// Constructor for the FinishController class, initializing the IFinishService and IConfiguration dependencies. This constructor sets up the necessary services for managing finish line data and accessing configuration settings, as well as determining the folder path for storing uploaded images based on environment variables or configuration values.
         /// </summary>
         /// <param name="storage">The IFinishService instance for managing finish line data.</param>
         /// <param name="config">The IConfiguration instance for accessing configuration settings.</param>
-        public FinishController(IFinishService storage, IConfiguration config)
+        public FinishController(IFinishService storage, IConfiguration config, ILogger<FinishController> logger)
         {
             this._finishService = storage;
             this._configuration = config;
-            this.folderpath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable(Key)) ?
+            this.folderpath = !String.IsNullOrEmpty(Environment.GetEnvironmentVariable(Key)) ?
                 Environment.GetEnvironmentVariable(Key) :
                 this._configuration.GetValue<string>(Key);
+            this.logger = logger;
+            
+            this.logger.LogInformation($"FinishController initialized with folder path: {this.folderpath}");
         }
 
         /// <summary>
@@ -50,8 +54,7 @@ namespace LRV.Regatta.Buero.Controllers
             {
                 // Create the directory
                 Directory.CreateDirectory(folderpath);
-                Console.WriteLine($"\tDirectory {folderpath} created successfully.");
-                Console.WriteLine("");
+                this.logger.LogInformation($"Directory created at {folderpath}");
             }
 
             FinishObject item = new FinishObject();
@@ -60,24 +63,29 @@ namespace LRV.Regatta.Buero.Controllers
             item.Name = $"Zieleinlauf {file.FinishTime:dd.MM.yyyy HH:mm:ss.fff}";
             item.FirstPath = file.FirstPhotoFile.FileName;
             item.SecondPath = file.SecondPhotoFile.FileName;
+            this.logger.LogInformation(
+                $"Received upload request for finish time: {file.FinishTime:dd.MM.yyyy HH:mm:ss.fff}");
+            this.logger.LogInformation($"\twith first photo: {file.FirstPhotoFile.FileName}");
+            this.logger.LogInformation($"\tand second photo: {file.SecondPhotoFile.FileName}");
 
 
             string filePath = Path.Combine(folderpath, file.FirstPhotoFile.FileName);
-            Console.WriteLine($"\tSaving file to {filePath}.");
+            this.logger.LogInformation($"\tSaving file to {filePath}.");
 
             using (var stream = System.IO.File.Create(filePath))
             {
                 await file.FirstPhotoFile.CopyToAsync(stream);
             }
             filePath = Path.Combine(folderpath, file.SecondPhotoFile.FileName);
-            Console.WriteLine($"\tSaving file to {filePath}.");
+            this.logger.LogInformation($"\tSaving file to {filePath}.");
 
             using (var stream = System.IO.File.Create(filePath))
             {
-                await file.FirstPhotoFile.CopyToAsync(stream);
+                await file.SecondPhotoFile.CopyToAsync(stream);
             }
 
             this._finishService.AddFinishObject(item);
+            this.logger.LogInformation($"FinishController saved.");
 
             return Ok();
         }
@@ -89,6 +97,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpDelete()]
         public IActionResult Delete()
         {
+            this.logger.LogInformation("Deleting all finish objects and associated image files.");
             this._finishService.DeleteAllFinishObject();
 
             foreach (var file in Directory.GetFiles(folderpath))
@@ -107,6 +116,7 @@ namespace LRV.Regatta.Buero.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            this.logger.LogInformation($"Deleting finish object with ID: {id} and associated image files.");
             var item = this._finishService.GetAllFinishObject().FirstOrDefault(x => x.Id == id);
             if (item != null)
             {

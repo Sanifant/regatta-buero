@@ -23,6 +23,10 @@ namespace LRV.Regatta.Buero
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("origin",
@@ -41,7 +45,7 @@ namespace LRV.Regatta.Buero
             var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "regatta";
 
             var connectionString = $"Server={dbHost};Database={dbName};User={dbUser};Password={dbPassword};";
-
+            
             MariaDbServerVersion serverVersion = new MariaDbServerVersion(new Version(11, 4, 5));
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(
@@ -152,9 +156,11 @@ namespace LRV.Regatta.Buero
 
             var app = builder.Build();
 
+            app.Logger.LogInformation($"Using {connectionString} to connect to the database.");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.Logger.LogInformation("Application is running in Development environment. Enabling Swagger.");
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
