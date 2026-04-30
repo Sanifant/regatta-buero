@@ -25,6 +25,12 @@ namespace LRV.Regatta.Buero
 
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
+            builder.Logging.AddSimpleConsole(options =>
+            {
+                options.IncludeScopes = true;
+                options.SingleLine = false;
+                options.TimestampFormat = "HH:mm:ss ";
+            });
             
 
             builder.Services.AddCors(options =>

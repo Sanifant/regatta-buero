@@ -78,10 +78,13 @@ namespace LRV.Regatta.Buero.Attributes
                 return;
             }
 
+            logger.LogDebug("API-Key aus Request extrahiert: {ExtractedApiKey}. Path: {Path}", extractedApiKey, context.HttpContext.Request.Path);
+            logger.LogDebug("API-Key: {ApiKey}.", apiKey);
             if (!apiKey.Equals(extractedApiKey))
             {
                 logger.LogWarning(
-                    "Ungültiger API-Key. Path: {Path}, RemoteIp: {RemoteIp}",
+                    "Ungültiger API-Key {ApiKey}. Path: {Path}, RemoteIp: {RemoteIp}",
+                    extractedApiKey,
                     context.HttpContext.Request.Path,
                     context.HttpContext.Connection.RemoteIpAddress);
 

@@ -4,9 +4,12 @@ services:
     build:
       context: ../LRV.Regatta.Buero
       dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
     environment:
+      DOTNET_ENVIRONMENT: Development
       DB_HOST: ${DB_HOST:-regattadb}
-      DB_PORT: ${DB_PORT:-3306} # Default-Port
+      DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME:-regatta_database}
       DB_USER: ${DB_USER:-regatta}
       DB_PASSWORD: ${DB_PASSWORD:-regatta}
@@ -14,6 +17,9 @@ services:
       REDIS_PORT: ${REDIS_PORT:-6379}
       ImageFolder: ${IMAGE_FOLDER:-/app/images}
       X-API-KEY: ${X_API_KEY:-mysecretkey}
+    depends_on:
+      - regattadb
+      - redis
       
   regattadb:
     image: mariadb:11.4
