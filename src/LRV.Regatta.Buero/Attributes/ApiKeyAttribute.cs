@@ -59,6 +59,10 @@ namespace LRV.Regatta.Buero.Attributes
             }
 
             var appSettings = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+            logger.LogDebug("\tAEnvironment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME): {ApiKey}.", Environment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME));
+            logger.LogDebug("\tEnvironment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME): {ApiKey}.", Environment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME));
+            logger.LogDebug("\tappSettings.GetValue<string>(APIKEYCONFIGURATIONNAME): {ApiKey}.", appSettings.GetValue<string>(APIKEYCONFIGURATIONNAME));
+            logger.LogDebug("\tappSettings.GetValue<string>(APIKEYNAME): {ApiKey}.", appSettings.GetValue<string>(APIKEYNAME));
             var apiKey = Environment.GetEnvironmentVariable(APIKEYCONFIGURATIONNAME)
                          ?? Environment.GetEnvironmentVariable(APIKEYLEGACYCONFIGURATIONNAME)
                          ?? appSettings.GetValue<string>(APIKEYCONFIGURATIONNAME)
