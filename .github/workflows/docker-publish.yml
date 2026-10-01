@@ -155,8 +155,11 @@ jobs:
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign verify {}@${DIGEST}
+        run: >-
+          echo "${TAGS}" | xargs -I {} cosign verify
+          --certificate-identity-regexp "https://github.com/${{ github.repository }}/\.github/workflows/docker-publish\.yml@refs/(heads|tags)/.*"
+          --certificate-oidc-issuer https://token.actions.githubusercontent.com
+          {}@${DIGEST}
 
-        
       - name: Deploy via Portainer webhook (integration)
         run: curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
