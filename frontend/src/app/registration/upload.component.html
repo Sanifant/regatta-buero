@@ -1,0 +1,18 @@
+<h2>Teams laden</h2>
+
+<input type="file" (change)="onFileSelected($event)" accept=".xml">
+<button (click)="uploadFile()" [disabled]="!xmlContent">Hochladen</button>
+
+<div>
+  <button (click)="getAllTeams()">Alle Teams anzeigen</button>
+  <button (click)="deleteTeams()">Teams l&ouml;schen</button>
+
+  <div *ngIf="teams.length > 0">
+    <h3>Gefundene Teams:</h3>
+    <ul>
+      <li *ngFor="let team of teams">
+        {{ team.name }} ({{ team.kurzform }}, {{ team.lettern }})
+      </li>
+    </ul>
+  </div>
+</div>

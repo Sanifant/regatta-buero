@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://buero.luebeckregatta.de/api",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
