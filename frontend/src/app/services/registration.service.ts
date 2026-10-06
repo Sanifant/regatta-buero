@@ -9,7 +9,7 @@ import {LogObject} from "../models/log.model";
 })
 export class RegistrationService {
 
-  private readonly apiUrl = 'https://buero.luebeckregatta.de/api';
+  private readonly apiUrl = '/api';
   private readonly apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12';
 
   constructor(private http: HttpClient) {

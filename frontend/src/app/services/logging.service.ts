@@ -10,7 +10,7 @@ import {PagedResult} from "../models/pagedResult.model";
 })
 export class LoggingService {
 
-  private readonly apiUrl = 'https://buero.luebeckregatta.de/api';
+  private readonly apiUrl = '/api';
   private readonly apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12';
 
   constructor(private http: HttpClient) {

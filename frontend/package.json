@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng serve --configuration development",
-    "build:watch": "ng build --watch --configuration development",
+    "start": "ng serve regatta-frontend",
+    "build": "ng build regatta-frontend",
+    "watch": "ng serve regatta-frontend --configuration development",
+    "build:watch": "ng build regatta-frontend --watch --configuration development",
     "test": "ng test regatta-frontend"
   },
   "private": true,

@@ -8,7 +8,7 @@ import {Finish} from "../models/finish.model";
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly apiUrl = 'https://buero.luebeckregatta.de/api/Finish';
+  private readonly apiUrl = '/api/Finish';
   private readonly apiKey = '37FD7F0F-EDA3-4DCA-983F-C8AED6AADF12';
 
   constructor(private http: HttpClient) { }

@@ -1,27 +1,37 @@
-# RegattaFrontend
+# Regatta-Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+Das Angular-19-Frontend ist Teil von [Sanifant/regatta-buero](https://github.com/Sanifant/regatta-buero).
+Alle Befehle hier werden im Ordner `frontend/` ausgefuehrt.
 
-## Development server
+## Entwicklung
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Node.js 22 verwenden. Das Backend mit seinen Datenbank-/Redis-Verbindungen separat starten.
 
-## Code scaffolding
+```bash
+npm ci
+npm start
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Der Entwicklungsserver laeuft auf Port 4200. Relative `/api`-Anfragen gehen ueber
+`src/proxy.conf.json` an das Backend auf Port 5015.
 
-## Build
+## Build und Tests
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
+```
 
-## Running unit tests
+Build-Ausgabe: `dist/regatta-frontend/browser/`. Chrome oder Chromium ist fuer Karma-Tests erforderlich.
+Die Beispielanwendung `projects/test` ist weiterhin enthalten, aber der Standard-Build
+und die Tests waehlen explizit `regatta-frontend`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Container
 
-## Running end-to-end tests
+```bash
+docker build -t regatta-buero-frontend .
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Der Nginx-Upstream und das gemeinsame Bild-Volume sind in `config/proxyconf` konfiguriert.
+Weitere Informationen zu Backend, CI, Deployment und Git-Historie stehen in der
+[gemeinsamen README](../README.md) und der [Migrationsdokumentation](../docs/REPOSITORY-MIGRATION.md).

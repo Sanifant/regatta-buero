@@ -1,9 +1,9 @@
 
 # Stage 1: Build the Angular application
-FROM node AS build
+FROM node:22-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
@@ -16,8 +16,8 @@ ARG VCS_REF="unknown"
 
 LABEL org.opencontainers.image.title="regatta-frontend" \
       org.opencontainers.image.description="Regatta frontend application" \
-      org.opencontainers.image.url="https://github.com/Sanifant/regatta-frontend" \
-      org.opencontainers.image.source="https://github.com/Sanifant/regatta-frontend" \
+      org.opencontainers.image.url="https://github.com/Sanifant/regatta-buero" \
+      org.opencontainers.image.source="https://github.com/Sanifant/regatta-buero" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.revision="${VCS_REF}" \

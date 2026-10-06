@@ -1,4 +1,4 @@
-name: Build, Test, and Publish Docker Image
+name: Frontend Build, Test, and Publish Docker Image
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -8,20 +8,27 @@ name: Build, Test, and Publish Docker Image
 on:
   push:
     branches: [ main, develop ]
+    paths: [ "frontend/**", ".github/workflows/frontend.yml" ]
   pull_request:
     branches: [ main, develop ]
+    paths: [ "frontend/**", ".github/workflows/frontend.yml" ]
   release:
-    types: [created]
+    types: [published]
 
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository }}-frontend
 
+
+defaults:
+  run:
+    working-directory: frontend
 
 jobs:
   build:
+    name: Frontend build
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +38,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -41,6 +49,7 @@ jobs:
         run: npm run build
 
   test:
+    name: Frontend tests
     runs-on: ubuntu-latest
     needs: build
 
@@ -51,8 +60,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -61,8 +71,11 @@ jobs:
         run: npm test -- --watch=false --browsers=ChromeHeadless
 
   publish:
-    if: ${{ github.event_name == 'release' && github.event.action == 'created' }}
+    name: Publish frontend
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
     needs: test
+    env:
+      FRONTEND_PORTAINER_WEBHOOK_URL: ${{ secrets.FRONTEND_PORTAINER_WEBHOOK_URL }}
 
     runs-on: ubuntu-latest
     permissions:
@@ -122,7 +135,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: .
+          context: ./frontend
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -157,9 +170,10 @@ jobs:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: >-
           echo "${TAGS}" | xargs -I {} cosign verify
-          --certificate-identity-regexp "https://github.com/${{ github.repository }}/\.github/workflows/docker-publish\.yml@refs/(heads|tags)/.*"
+          --certificate-identity-regexp "https://github.com/${{ github.repository }}/\.github/workflows/frontend\.yml@refs/(heads|tags)/.*"
           --certificate-oidc-issuer https://token.actions.githubusercontent.com
           {}@${DIGEST}
 
-      - name: Deploy via Portainer webhook (integration)
-        run: curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+      - name: Deploy frontend via Portainer webhook
+        if: ${{ env.FRONTEND_PORTAINER_WEBHOOK_URL != '' }}
+        run: curl -fsSL -X POST "$FRONTEND_PORTAINER_WEBHOOK_URL"
