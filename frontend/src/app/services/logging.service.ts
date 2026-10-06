@@ -30,7 +30,7 @@ export class LoggingService {
       'X-API-KEY': `${this.apiKey}`
     });
 
-    return this.http.get<PagedResult<LogObject>>(this.apiUrl + `/Log/search?page${page}&pagesize=${pageSize}`, { headers})
+    return this.http.get<PagedResult<LogObject>>(this.apiUrl + `/Log/search?page=${page}&pageSize=${pageSize}`, { headers})
   }
 
   addRegistration(log: LogObject): Observable<void> {
