@@ -9,10 +9,12 @@ on:
     branches: [ "main" ]
     paths:
       - src/**
+      - .github/workflows/dotnet.yml
   pull_request:
     branches: [ "main" ]
     paths:
       - src/**
+      - .github/workflows/dotnet.yml
 
 jobs:
   build:
@@ -40,15 +42,15 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj --no-restore
 
     - name: Test
       run: |
         rm -rf ../artifacts/test-results ../artifacts/coverage-report
-        dotnet test --no-build --verbosity normal --settings ../coverage.runsettings --collect:"XPlat Code Coverage" --results-directory ../artifacts/test-results
+        dotnet test LRV.Regatta.Buero.Tests/LRV.Regatta.Buero.Tests.csproj --no-build --verbosity normal --settings ../coverage.runsettings --collect:"XPlat Code Coverage" --results-directory ../artifacts/test-results
 
     - name: Restore local .NET tools
       run: dotnet tool restore

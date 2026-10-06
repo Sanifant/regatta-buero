@@ -1,11 +1,12 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
 {
-	"name": "C# (.NET) and PostgreSQL",
+	"name": "Regatta Backend and Frontend",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
+		"ghcr.io/devcontainers/features/node:1": { "version": "22" }
 	},
 	"customizations": {
 		"vscode": {
@@ -14,6 +15,7 @@
 				"davidanson.vscode-markdownlint",
 				"GitHub.vscode-github-actions",
 				"ms-dotnettools.csdevkit",
+				"angular.ng-template",
 				"Redis.redis-for-vscode",
 				"Oracle.mysql-shell-for-vs-code",
 				"streetsidesoftware.code-spell-checker-german"
@@ -36,7 +38,8 @@
 	},
 	"forwardPorts": [
 		5000,
-		5015
+		5015,
+		4200
 	],
 	"portsAttributes": {
 		"5015": {
@@ -44,5 +47,5 @@
 			"onAutoForward": "notify"
 		}
 	},
-	"postCreateCommand": "dotnet restore"
+	"postCreateCommand": "dotnet restore \"src/LRV Regattabuero.sln\" && npm ci --prefix frontend"
 }

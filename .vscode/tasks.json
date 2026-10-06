@@ -76,6 +76,39 @@
                 "serve coverage report"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "install frontend",
+            "type": "shell",
+            "command": "npm ci",
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "start frontend",
+            "type": "npm",
+            "script": "start",
+            "path": "frontend",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "build frontend",
+            "type": "npm",
+            "script": "build",
+            "path": "frontend",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test frontend",
+            "type": "npm",
+            "script": "test",
+            "path": "frontend",
+            "group": "test",
+            "problemMatcher": []
         }
     ]
 }

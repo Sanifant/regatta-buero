@@ -1,9 +1,9 @@
-# Regatta-Buero
+# Regatta-Buero – Backend und Frontend
 
 [![.NET](https://github.com/Sanifant/regatta-buero/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Sanifant/regatta-buero/actions/workflows/dotnet.yml)
 [![Regattabureo Backend](https://github.com/Sanifant/regatta-buero/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Sanifant/regatta-buero/actions/workflows/docker-publish.yml)
 
-Backend-Service fuer das Regatta-Buero auf Basis von ASP.NET Core 8, MariaDB und Redis.
+Gemeinsames Repository fuer das Regatta-Buero: ASP.NET-Core-8-Backend mit MariaDB und Redis sowie Angular-19-Frontend. Backend und Frontend bleiben getrennt startbar und deploybar.
 
 ## Ueberblick
 
@@ -22,6 +22,7 @@ Das Projekt stellt REST-Endpunkte fuer Meldungen, Vereine, Zieleinlaeufe und Log
 
 ```
 regatta-buero/
+├── frontend/                         # Angular-Frontend, Tests und Dockerfile
 ├── src/
 │   ├── LRV.Regatta.Buero/              # Hauptanwendung (Web API)
 │   │   ├── Attributes/                 # ApiKeyAttribute (API-Key-Authentifizierung)
@@ -42,9 +43,53 @@ regatta-buero/
     └── docker-compose.yml              # Lokale Infrastruktur (MariaDB, phpMyAdmin, Redis, RedisInsight)
 ```
 
+## Frontend im gemeinsamen Repository
+
+Das bisherige Projekt `Sanifant/regatta-frontend` liegt jetzt unter `frontend/`.
+Die komplette Git-Historie wurde als zweiter Elternzweig importiert; das Backend bleibt unter `src/`.
+
+```bash
+# Im Repository-Hauptverzeichnis
+npm ci --prefix frontend
+npm start --prefix frontend
+```
+
+Das Frontend startet auf Port 4200 und leitet `/api` ueber `frontend/src/proxy.conf.json`
+an das lokal gestartete Backend auf Port 5015 weiter. Bei einem abweichenden Backend-Port
+kann ein eigener Proxy mit `npm start --prefix frontend -- --proxy-config /pfad/proxy.json`
+verwendet werden. Die Angular-Services verwenden relative `/api`-URLs.
+
+```bash
+npm run build --prefix frontend
+npm test --prefix frontend -- --watch=false --browsers=ChromeHeadless
+```
+
+Fuer den Backend-Start weiterhin die Datenbank-, Redis- und API-Key-Konfiguration
+weiter unten setzen. Die bestehende API-Key-Authentifizierung wurde bei der Migration
+nicht veraendert; die Frontend-Konfiguration muss zum Backend passen.
+
+Backend-CI bleibt in `.github/workflows/dotnet.yml`; Frontend-Build, Tests und
+Container-Publikation liegen in `.github/workflows/frontend.yml`.
+Das Frontend-Image wird bei Releases als `ghcr.io/sanifant/regatta-buero-frontend`
+veroeffentlicht. Das Backend-Image behaelt seinen Namen. Ein optionaler Frontend-Deploy
+verwendet ein eigenes Secret `FRONTEND_PORTAINER_WEBHOOK_URL`; der Backend-Webhook
+wird nicht fuer das Frontend wiederverwendet. Bestehende Deployments muessen das neue
+Frontend-Image verwenden.
+
+```bash
+docker build -t regatta-buero-frontend ./frontend
+```
+
+Der Nginx-Container nutzt weiterhin den Upstream `regatta-backend:8000` und den
+bestehenden gemeinsamen Bildordner `/wwwdata/images`. Beim gemeinsamen Deployment
+muessen Backend-Netzwerkalias, Port und Bild-Volume entsprechend bereitgestellt werden.
+
+Details zum Historienimport und zur Archivierung: [Repository-Migration](docs/REPOSITORY-MIGRATION.md).
+
 ## Voraussetzungen
 
 - .NET SDK 8
+- Node.js 22 und npm fuer das Frontend
 - Docker + Docker Compose (empfohlen fuer lokale Infrastruktur)
 
 ## Lokaler Start

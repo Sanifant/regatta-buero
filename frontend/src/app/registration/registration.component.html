@@ -1,0 +1,80 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-group">
+
+  <div class="form-group">
+    <label>
+      Typ:
+      <select formControlName="type">
+        <option *ngFor="let t of registrationTypes" [value]="t">
+          {{ registrationTypeLabels[t] }}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label>Rennen:</label>
+    <input formControlName="race" />
+  </div>
+
+  <div class="form-group">
+    <label>Startnummer:</label>
+    <input formControlName="startNo" />
+  </div>
+
+  <div class="form-group">
+    <label>Team (min. 3 Buchstaben):</label>
+    <input formControlName="team" autocomplete="off" />
+    <ul *ngIf="teamSuggestions.length > 0" class="suggestions">
+      <li *ngFor="let suggestion of teamSuggestions" (click)="selectTeam(suggestion)">
+        {{ suggestion }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="form-group">
+    <label>Obmann:</label>
+    <input formControlName="chairMan" />
+  </div>
+
+  <div class="form-group">
+    <label>Position 1: <input formControlName="position1" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 2: <input formControlName="position2" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 3: <input formControlName="position3" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 4: <input formControlName="position4" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 5: <input formControlName="position5" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 6: <input formControlName="position6" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 7: <input formControlName="position7" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Position 8: <input formControlName="position8" /></label>
+  </div>
+
+  <div class="form-group">
+    <label>Steuermann (Cox): <input formControlName="positionCox" /></label>
+  </div>
+
+  <div class="form-group">
+    <button class="btn btn-light" type="submit" [disabled]="!form.valid">Speichern</button>
+    <button class="btn btn-secondary" type="button" (click)="resetForm()">Zurücksetzen</button>
+  </div>
+
+</form>

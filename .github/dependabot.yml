@@ -16,3 +16,12 @@ updates:
    schedule:
      interval: "weekly"
      day: "wednesday"
+
+ - package-ecosystem: "npm"
+   directory: "/frontend"
+   schedule:
+     interval: weekly
+ - package-ecosystem: "docker"
+   directory: "/frontend"
+   schedule:
+     interval: weekly
