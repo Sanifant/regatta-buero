@@ -21,7 +21,6 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
 
   login() {
-    console.log(this.model);
     if (this.model.username === 'buero' && this.model.password === 'wakenitz') {
       localStorage.setItem('token', 'Toiken');
 
